@@ -64,7 +64,7 @@ class SearchSupport:
         for cell_address in get_all_cell_addresses():
             if grid.get_cell_status(cell_address) is CellStatus.PREDEFINED:
                 value = grid.get_cell_value(cell_address)
-                candidate_list = self._exclusion_logic.apply_and_exclude_cell_value(cell_address, value)
+                candidate_list = self._exclusion_logic.apply_and_exclude_cell_value(cell_address, value)  # type: ignore
                 if candidate_list is not None:
                     self._candidate_queue.extend(candidate_list)
 
