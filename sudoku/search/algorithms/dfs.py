@@ -114,7 +114,7 @@ class _DepthFirstSearch(AbstractSearchAlgorithm):
             _logger.info("Empty cells without applicable candidates found, nothing will be pushed to stack")
             return
         candidate_list = search_support.get_undefined_cell_candidates(self._candidate_query_mode)
-        node = _SearchGraphNode(search_support, candidate_list)
+        node = _SearchGraphNode(search_support, candidate_list)  # type: ignore
         self._stack.push(node)
 
     def apply_cell_value(self) -> SearchStepOutcome:
@@ -136,7 +136,7 @@ class _DepthFirstSearch(AbstractSearchAlgorithm):
 
         if not search_support.has_empty_cells_without_applicable_candidates():
             candidate_list = search_support.get_undefined_cell_candidates(self._candidate_query_mode)
-            node = _SearchGraphNode(search_support, candidate_list)
+            node = _SearchGraphNode(search_support, candidate_list)  # type: ignore
             self._stack.push(node)
 
         return SearchStepOutcome.CONTINUE
