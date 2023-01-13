@@ -41,13 +41,6 @@ class _Cell:
         self._value = value
         self._status = status
 
-    @staticmethod
-    def create_cells(status: CellStatus) -> Tuple[_Cell, ...]:
-        # dummy element at the index 0 eliminates the need to shift the index when
-        # accessing the cells by cell value, so this is a minor optimization
-        cells = [None] + [_Cell(status, value) for value in range(1, 10)]
-        return tuple(cells)  # type: ignore
-
     @property
     def value(self) -> int:
         assert self._status != CellStatus.UNDEFINED, f"Cell with status {self._status} does not have value."
@@ -61,37 +54,44 @@ class _Cell:
         return f"{self.__class__.__name__}(value={self._value}, status={self._status})"
 
 
+def _create_cells(status: CellStatus) -> Tuple[_Cell, ...]:
+    # dummy element at the index 0 eliminates the need to shift the index when
+    # accessing the cells by cell value, so this is a minor optimization
+    cells = [None] + [_Cell(status, value) for value in range(1, 10)]
+    return tuple(cells)  # type: ignore
+
+
 class _CellSingletons:
     """
     Internal helper class providing access to the instances of the _Cell class.
     """
 
-    __undefined_cell: _Cell = _Cell(CellStatus.UNDEFINED)
+    _undefined_cell: _Cell = _Cell(CellStatus.UNDEFINED)
 
-    __predefined_cells: Tuple[_Cell, ...] = _Cell.create_cells(CellStatus.PREDEFINED)
+    _predefined_cells: Tuple[_Cell, ...] = _create_cells(CellStatus.PREDEFINED)
 
-    __completed_cells: Tuple[_Cell, ...] = _Cell.create_cells(CellStatus.COMPLETED)
+    _completed_cells: Tuple[_Cell, ...] = _create_cells(CellStatus.COMPLETED)
 
     @staticmethod
     def get_undefined_cell() -> _Cell:
         """
         Returns the undefined cell singleton.
         """
-        return _CellSingletons.__undefined_cell
+        return _CellSingletons._undefined_cell
 
     @staticmethod
     def get_predefined_cell(value: int) -> _Cell:
         """
         Returns the predefined cell singleton with the given cell value.
         """
-        return _CellSingletons.__predefined_cells[value]
+        return _CellSingletons._predefined_cells[value]
 
     @staticmethod
     def get_completed_cell(value: int) -> _Cell:
         """
         Returns the completed cell singleton with the given cell value.
         """
-        return _CellSingletons.__completed_cells[value]
+        return _CellSingletons._completed_cells[value]
 
 
 _ValidationBlock = Tuple[CellAddress, ...]
