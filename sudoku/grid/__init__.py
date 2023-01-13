@@ -20,3 +20,4 @@
 from .cell_address import CellAddress  # noqa: F401
 from .cell_address import get_all_cell_addresses, get_cell_address, get_peer_addresses  # noqa: F401
 from .cell_status import CellStatus  # noqa: F401
+from .grid import Grid  # noqa: F401
