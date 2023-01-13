@@ -143,7 +143,7 @@ class Grid:
 
     def __init__(self, cell_values: Optional[CellValues] = None, original: Optional[Grid] = None) -> None:
         if Grid._is_ordinary_constructor(cell_values, original):
-            self._cells, self._undefined_cell_count = Grid._create_cells(cell_values)  #  type: ignore
+            self._cells, self._undefined_cell_count = Grid._create_cells(cell_values)  # type: ignore
         elif Grid._is_copy_constructor(cell_values, original):
             self._cells = [original._cells[row].copy() for row in range(0, 9)]  # type: ignore
             self._undefined_cell_count = original._undefined_cell_count  # type: ignore
