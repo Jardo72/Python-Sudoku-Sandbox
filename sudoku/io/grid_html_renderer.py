@@ -21,6 +21,7 @@ from jinja2 import Environment, BaseLoader
 
 from sudoku.grid import CellStatus, Grid
 from sudoku.grid import get_cell_address
+from sudoku.search.engine import SearchSummary
 
 
 _TEMPLATE = """
@@ -30,8 +31,25 @@ _TEMPLATE = """
 <title>Search Summary</title>
 <style>
 body {
-    background-color: #DDDDFF;
+    background-color: #AFCEEB;
     padding: 30px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 140%;
+    padding-top: 10px;
+}
+
+table.summary {
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+td.summary {
+    border: 1px solid black;
+    vertical-align: center;
+    padding: 3px 6px;
 }
 
 table.gridLayout {
@@ -43,13 +61,13 @@ td.region {
     border-style: none;
     text-align: center;
     vertical-align: center;
-    padding: 0px
+    padding: 0px;
 }
 
 table.region {
     border-style: none;
     border-collapse: collapse;
-    padding: 0px
+    padding: 0px;
 }
 
 td.cell {
@@ -70,6 +88,31 @@ td.predefinedCell {
 </head>
 
 <body>
+<h1>Summary</h1>
+<table class="summary">
+<tr>
+<td class="summary">Number of undefined cells in the puzzle</td>
+<td class="summary">{{ summary.original_undefined_cell_count }}</td>
+</tr>
+<tr>
+<td class="summary">Search algorithm</td>
+<td class="summary">{{ summary.algorithm }}</td>
+</tr>
+<tr>
+<td class="summary">Search outcome</td>
+<td class="summary">{{ summary.outcome }}</td>
+</tr>
+<tr>
+<td class="summary">Search duration [ms]</td>
+<td class="summary">{{ summary.duration_millis }}</td>
+</tr>
+<tr>
+<td class="summary">Number of tried cell values</td>
+<td class="summary">{{ summary.cell_values_tried }}</td>
+</tr>
+</table>
+
+<h1>Final Grid</h1>
 <table class='gridLayout'>
 {% for region_row in [0, 1, 2] %}
 <tr>
@@ -94,7 +137,7 @@ td.predefinedCell {
 """  # noqa: E501
 
 
-def render_as_html(grid: Grid) -> str:
+def render_as_html(search_summary: SearchSummary) -> str:
     """
     Generates and returns HTML representation of the given grid.
 
@@ -104,7 +147,7 @@ def render_as_html(grid: Grid) -> str:
     Returns:
         str: The generated HTML representation of the given grid.
     """
-    renderer = _GridHtmlRenderer(grid)
+    renderer = _GridHtmlRenderer(search_summary)
     return renderer.render()
 
 
@@ -114,24 +157,31 @@ class _GridHtmlRenderer:
     generate an HTML grid presenting the cell values of the given grid.
     """
 
-    def __init__(self, grid: Grid) -> None:
-        self._grid = grid
+    def __init__(self, search_summary: SearchSummary) -> None:
+        self._search_summary = search_summary
         self._environment = Environment(loader=BaseLoader())
 
     def render(self) -> str:
         values = [["" for column in range(9)] for row in range(9)]
         styles = [["" for column in range(9)] for row in range(9)]
+        grid = self._search_summary.final_grid
         for row in range(9):
             for column in range(9):
                 cell_address = get_cell_address(row, column)
-                cell_status = self._grid.get_cell_status(cell_address)
+                cell_status = grid.get_cell_status(cell_address)
                 styles[row][column] = "cell"
                 if cell_status == CellStatus.COMPLETED:
-                    values[row][column] = str(self._grid.get_cell_value(cell_address))
+                    values[row][column] = str(grid.get_cell_value(cell_address))
                 elif cell_status == CellStatus.PREDEFINED:
-                    values[row][column] = str(self._grid.get_cell_value(cell_address))
+                    values[row][column] = str(grid.get_cell_value(cell_address))
                     styles[row][column] = "cell predefinedCell"
                 else:
                     values[row][column] = ""
         template = self._environment.from_string(_TEMPLATE)
-        return template.render(values=values, styles=styles, trim_blocks=True, lstrip_blocks=True)
+        return template.render(
+            summary=self._search_summary,
+            values=values,
+            styles=styles,
+            trim_blocks=True,
+            lstrip_blocks=True
+        )
