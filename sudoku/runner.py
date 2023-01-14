@@ -25,7 +25,6 @@ from traceback import print_exc
 
 from colorama import init as init_colorama
 
-from sudoku.grid import Grid
 from sudoku.io import InvalidInputError
 from sudoku.io import read_from_file, render_as_html, render_as_text
 from sudoku.search.engine import InvalidPuzzleError, NoSuchAlgorithmError, SearchAlgorithmRegistry, SearchSummary

@@ -19,7 +19,7 @@
 
 from jinja2 import Environment, BaseLoader
 
-from sudoku.grid import CellStatus, Grid
+from sudoku.grid import CellStatus
 from sudoku.grid import get_cell_address
 from sudoku.search.engine import SearchSummary
 
