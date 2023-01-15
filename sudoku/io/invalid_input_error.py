@@ -18,7 +18,9 @@
 #
 
 
-from .grid_html_renderer import render_as_html  # noqa: F401
-from .grid_text_renderer import render_as_text  # noqa: F401
-from .invalid_input_error import InvalidInputError  # noqa: F401
-from .puzzle_parser import read_from_file, read_from_string  # noqa: F401
+class InvalidInputError(Exception):
+    """
+    Raised to inidicate that the function read_from_file or read_from_string has encountered
+    an invalid input.
+    """
+    pass
