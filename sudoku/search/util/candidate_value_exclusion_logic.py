@@ -18,40 +18,18 @@
 #
 
 from __future__ import annotations
-from enum import Enum, unique
 from logging import getLogger
 from typing import List, Optional, Tuple
 
 from sudoku.grid import CellAddress
 from sudoku.grid import get_all_cell_addresses, get_peer_addresses
+from .exclusion_outcome import ExclusionOutcome
 from .candidate_list import CandidateList
 from .candidate_query_mode import CandidateQueryMode
 from .unambiguous_candidate import UnambiguousCandidate
 
 
 _logger = getLogger(__name__)
-
-
-@unique
-class _ExclusionOutcome(Enum):
-    """
-    Defines possible outcomes of an exclusion, for instance an exclusion of a candidate
-    value for a single undefined cell. The meaning of particular enum elements is the
-    following:
-    * UNAMBIGUOUS_CANDIDATE_FOUND indicates that after the exclusion of a candidate, there
-      is only single applicable candidate remaining. This outcome inidcates that an
-      unambiguous candidate has been found by the exclusion.
-    * UNAMBIGUOUS_CANDIDATE_NOT_FOUND indicates that the exclusion has not identified an
-      unambiguous candidate. This value is to be used in several situations, for instance
-      if two or more applicable candidates are still remaining after the exclusion, or if
-      the exclusion of a candidate has not changed the set of candidates as the candidate
-      was already excluded.
-    This enum is internal, there is no need to use it directly in other modules.
-    """
-
-    UNAMBIGUOUS_CANDIDATE_FOUND = 1
-
-    UNAMBIGUOUS_CANDIDATE_NOT_FOUND = 2
 
 
 class _CandidateValues:
@@ -88,7 +66,7 @@ class _CandidateValues:
         result = [value for value in range(1, 10) if self._bitmask & (1 << (value - 1))]
         return tuple(result)
 
-    def exclude_value(self, value: int) -> _ExclusionOutcome:
+    def exclude_value(self, value: int) -> ExclusionOutcome:
         _logger.debug("Going to exclude the value %d, bitmask before exclusion = %s", value, format(self._bitmask, "b"))
         value_mask = 1 << (value - 1)
         if self._bitmask & value_mask == value_mask:
@@ -96,8 +74,8 @@ class _CandidateValues:
             _logger.debug("Bitmask after exclusion = %s", format(self._bitmask, "b"))
             self._applicable_value_count -= 1
             if self._applicable_value_count == 1:
-                return _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND
-        return _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
+                return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND
+        return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
         if self._applicable_value_count != 1:
@@ -175,7 +153,7 @@ class CandidateValueExclusionLogic:
             _logger.debug("Going to exclude candidate value %d for cell [%d, %d]", value, row, column)
             exclusion_outcome = self._candidates[row][column].exclude_value(value)
             _logger.debug("Exclusion outcome = %s", exclusion_outcome)
-            if exclusion_outcome is _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND:
+            if exclusion_outcome is ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND:
                 result = result or []
                 candidate = UnambiguousCandidate(peer_address, self._candidates[row][column].get_single_remaining_applicable_value())
                 result.append(candidate)
