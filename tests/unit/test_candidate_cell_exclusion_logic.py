@@ -47,7 +47,7 @@ class TestRegionCandidateCells:
         with upper left cell [3, 6]) where the value 7 is applicable.
         """
         candidate_cells = _RegionCandidateCells(topmost_row=3, leftmost_column=6, value=7)
-        
+
         exclusion_result = candidate_cells.apply_and_exclude_cell_value(get_cell_address(0, 0), 7)
         assert exclusion_result == ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 

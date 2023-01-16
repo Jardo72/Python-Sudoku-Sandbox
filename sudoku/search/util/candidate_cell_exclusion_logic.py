@@ -116,7 +116,7 @@ class _RegionCandidateCells:
             mask = 1 << shift
             if self._bitmask & mask == mask:
                 new_count += 1
-        
+
         _logger.debug("Going to update the value count from %d to %d", self._applicable_cell_count, new_count)
         result = ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
         if new_count == 1 and self._applicable_cell_count > new_count:
