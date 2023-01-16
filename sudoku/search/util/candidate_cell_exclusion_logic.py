@@ -32,7 +32,8 @@ _logger = getLogger(__name__)
 
 class _RegionCandidateCells:
     """
-    Keeps track of cells within a region where a particular value is applicable.
+    Internal helper class that keeps track of cells within a region where a particular
+    value is applicable.
     """
 
     _row_peers = {0: 0b111111000, 1: 0b111000111, 2: 0b000111111}
@@ -124,9 +125,10 @@ class _RegionCandidateCells:
         return result
 
     def get_single_remaining_applicable_cell(self) -> Optional[UnambiguousCandidate]:
+        # TODO: use assert
         if self._applicable_cell_count != 1:
             message = "Cannot provide single remaining applicable cell ({0} candidates remaining)."
-            raise RuntimeError(message.format(self._applicable_value_count))
+            raise RuntimeError(message.format(self._applicable_cell_count))
         _logger.debug("Remaining bitmask = %s", format(self._bitmask, 'b'))
         for i in range(0, 9):
             mask = 1 << i
@@ -148,7 +150,7 @@ class _RegionCandidateCells:
 
 class _RegionGrid:
     """
-    Helper class supporting candidate cell exclusion. Single instance of this class
+    Internal helper class supporting candidate cell exclusion. Single instance of this class
     aggregates 9 instances of _RegionCandidateCells.
     """
 
@@ -157,7 +159,6 @@ class _RegionGrid:
             self._regions = tuple([_RegionCandidateCells(row, column, value) for row in [0, 3, 6] for column in [0, 3, 6]])
         else:
             self._regions = regions
-
 
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
         result = None
@@ -169,7 +170,6 @@ class _RegionGrid:
                 if candidate:
                     result.append(candidate)
         return result
-
 
     def copy(self) -> _RegionGrid:
         """
@@ -183,34 +183,33 @@ class CandidateCellExclusionLogic:
     """
     Logic responsible for exclusion of candidate cells where a particular value is
     not applicable. The exclusion leads to identification of the only cell within
-    a region where a value is applicable. For such a cell, the value is considered
-    as unambiguous candidate value. This class is an internal helper that should
-    not be used directly by other modules.
+    a region where a value is applicable (other cells within the region have been
+    excluded for the value). For such a cell, the value is considered as unambiguous
+    candidate value. This class is an internal helper that should not be used directly
+    by other packages.
     """
 
-    def __init__(self, original_exclusion_logic: CandidateCellExclusionLogic = None) -> None:
+    def __init__(self, original_exclusion_logic: Optional[CandidateCellExclusionLogic] = None) -> None:
         if original_exclusion_logic is None:
-            self._region_grids = tuple([_RegionGrid(value) for value in range(1, 10)])
+            self._region_grids: Tuple[_RegionGrid, ...] = tuple([_RegionGrid(value) for value in range(1, 10)])
         else:
-            self._region_grids = tuple([grid.copy() for grid in original_exclusion_logic._region_grids])
+            self._region_grids: Tuple[_RegionGrid, ...] = tuple([grid.copy() for grid in original_exclusion_logic._region_grids])
 
-    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int):
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
         """
         Applies the given cell value to the cell with the given coordinates and excludes
         all peers of the given cell as candidate cells for the given value.
-        Args:
-            row (int):      The row coordinate of the cell the given value is to
-                            be applied to. Zero corresponds to the first row, eight
-                            corresponds to the last row.
-            column (int)    The column coordinate of the cell the given value is to
-                            be applied to. Zero corresponds to the first column, eight
-                            corresponds to the last column.
-            value (int):    The value for the given cell.
-        Returns:
-            List of UnambiguousCandidate instances, one for each of those cells which have
-            been identified as unambiguous candidate cells with any region for any value.
-            None is returned if the exclusion has not led to any cell being identified as
-            unambiguous candidate cell.
+
+            Parameters:
+                cell_address (CellAddress):     The coordinates of the cell the given value is to
+                                                be applied to.
+                value (int):                    The value for the given cell.
+
+            Returns:
+                List of UnambiguousCandidate instances, one for each of those cells which have
+                been identified as unambiguous candidate cells with any region for any value.
+                None is returned if the exclusion has not led to any cell being identified as
+                unambiguous candidate cell.
         """
         _logger.debug("Going to apply & exclude the value %d for the cell %s", value, cell_address)
         result = None
@@ -223,6 +222,13 @@ class CandidateCellExclusionLogic:
 
     def copy(self) -> CandidateCellExclusionLogic:
         """
-        Creates and returns a deep copy of this object.
+        Creates and returns a copy of this object which behaves as if it was a deep copy
+        of this object.
+
+            Returns:
+                CandidateCellExclusionLogic: The created clone of this object. Be aware of the fact that
+                                             the returned object is semantically equivalent to deep copy
+                                             of this object. In other words, any modification of the clone will
+                                             not change the status of this object and vice versa.
         """
         return CandidateCellExclusionLogic(self)

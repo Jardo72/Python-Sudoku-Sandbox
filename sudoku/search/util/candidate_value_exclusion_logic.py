@@ -78,6 +78,7 @@ class _CandidateValues:
         return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
+        # TODO: use assert
         if self._applicable_value_count != 1:
             message = f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
             raise RuntimeError(message)
@@ -104,9 +105,9 @@ class CandidateValueExclusionLogic:
     Logic responsible for exclusion of candidate values inapplicable to particular cells.
     For instance, if the value of a cell is set to 5, the value 5 is excluded for all
     cells within the same row, column, and region. If a single candidate value remains
-    applicable to a cell, that value is considered as unambiguous candidate for that
-    cell. This class is an internal helper which should not be used directly by other
-    modules.
+    applicable to a cell (i.e. all other candidate values have been excluded), that value
+    is considered as unambiguous candidate for that cell. This class is an internal helper
+    which should not be used directly by other packages.
     """
 
     def __init__(self, original: Optional[CandidateValueExclusionLogic] = None) -> None:
@@ -134,15 +135,15 @@ class CandidateValueExclusionLogic:
         Applies the given cell value to the cell with the given coordinates and excludes
         the given cell value for the peers of the cell with the coordinates.
 
-        Parameters:
-            cell_address (CellAddress):    The coordinates of the cell the given value is to
-                                           be applied to.
-            value (int):                   The value for the given cell.
+            Parameters:
+                cell_address (CellAddress):    The coordinates of the cell the given value is to
+                                            be applied to.
+                value (int):                   The value for the given cell.
 
-        Returns:
-            List of UnambiguousCandidate instances, one for each of those peers of the concerned
-            cell for which just a single applicable candidate value has remained after the
-            exclusion. None is returned if there is no such peer.
+            Returns:
+                List of UnambiguousCandidate instances, one for each of those peers of the concerned
+                cell for which just a single applicable candidate value has remained after the
+                exclusion. None is returned if there is no such peer.
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to apply candidate value %d to cell [%d, %d]", value, row, column)
@@ -221,13 +222,13 @@ class CandidateValueExclusionLogic:
         Returns the number of candidate values applicable to the cell with the given
         coordinates.
 
-        Parameters:
-            cell_address (CellAddress):    The coordinates of the cell for which the number of
-                                           applicable candidate values is to be returned.
+            Parameters:
+                cell_address (CellAddress):    The coordinates of the cell for which the number of
+                                            applicable candidate values is to be returned.
 
-        Returns:
-            int:    The number of candidate values which are still applicable (i.e. have not
-                    been excluded yet) to the cell with the given coordinates.
+            Returns:
+                int:    The number of candidate values which are still applicable (i.e. have not
+                        been excluded yet) to the cell with the given coordinates.
         """
         return self._candidates[cell_address.row][cell_address.column].applicable_value_count
 
@@ -236,10 +237,10 @@ class CandidateValueExclusionLogic:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-        Returns:
-            CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
-                                          the returned object is semantically equivalent to deep copy
-                                          of this object. In other words, any modification of the clone will
-                                          not change the status of this object and vice versa.
+            Returns:
+                CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
+                                              the returned object is semantically equivalent to deep copy
+                                              of this object. In other words, any modification of the clone will
+                                              not change the status of this object and vice versa.
         """
         return CandidateValueExclusionLogic(self)

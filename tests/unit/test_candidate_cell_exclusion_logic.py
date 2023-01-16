@@ -138,3 +138,361 @@ class TestRegionCandidateCells:
         expected_unambiguous_candidate = UnambiguousCandidate(get_cell_address(0, 1), 8)
         actual_unambiguous_candidate = candidate_cells.get_single_remaining_applicable_cell()
         assert expected_unambiguous_candidate == actual_unambiguous_candidate
+
+
+class TestCandidateCellExclusionLogic:
+    """
+    Test fixture aimed at the CandidateCellExclusionLogic class. When designing the
+    test cases, I wanted to ensure complete coverage of various aspects:
+    * Exclusion of candidate cells in each of the nine regions.
+    * All valid cell values.
+    * Various kinds of exclusion (e.g. row and column, row and cells, column and cells).
+    """
+
+    def test_row_and_column_exclusion_with_cell_exclusion_in_upper_left_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |     9 |
+        |     1 |       |       |
+        |       | 9     |       |
+        +-------+-------+-------+
+        |   9   |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 9 has to be identified as unambiguous candidate for
+        the cell [1; 0].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 8), 9)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 3), 9)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 1), 9)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 2), 1)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(1, 0), 9) in candidate_list
+
+    def test_row_and_column_exclusion_in_upper_middle_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |     3 |
+        |   3   |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       | 3     |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |     3 |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 3 has to be identified as unambiguous candidate for
+        the cell [0; 4].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 1), 3)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 8), 3)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 3), 3)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 5), 3)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(0, 4), 3) in candidate_list
+
+    def test_row_exclusion_with_cell_exclusion_in_upper_right_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       | 9 4   |
+        | 2     |       |       |
+        |       |     2 |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 2 has to be identified as unambiguous candidate for
+        the cell [0; 8].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 0), 2)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 3), 2)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 6), 9)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 7), 4)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(0, 8), 2) in candidate_list
+
+    def test_column_exclusion_with_cell_exclusion_in_middle_left_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |     4 |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |   5   |       |       |
+        |       |       |       |
+        |   9   |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        | 4     |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 4 has to be identified as unambiguous candidate for
+        the cell [4; 1].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 2), 4)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 0), 4)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 1), 5)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 1), 9)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(4, 1), 4) in candidate_list
+
+    def test_row_exclusion_with_cell_exclusion_in_middle_middle_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |   5   |       |       |
+        |       | 2   7 |       |
+        |       |       |     5 |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 5 has to be identified as unambiguous candidate for
+        the cell [4; 4].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 1), 5)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 8), 5)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 3), 2)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 5), 7)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(4, 4), 5) in candidate_list
+
+    def test_row_and_column_exclusion_with_cell_exclusion_in_middle_right_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |   8   |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       | 5     |
+        |       |       |       |
+        |     8 |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |     8 |
+        +-------+-------+-------+
+        For the grid above, the value 8 has to be identified as unambiguous candidate for
+        the cell [4; 6].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 7), 8)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 2), 8)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 8), 8)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 6), 5)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(4, 6), 8) in candidate_list
+
+    def test_row_and_column_exclusion_in_bottom_left_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |       |
+        | 7     |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |     7 |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |   7   |
+        |       |       |       |
+        |       | 7     |       |
+        +-------+-------+-------+
+        For the grid above, the value 7 has to be identified as unambiguous candidate for
+        the cell [7; 1].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 0), 7)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 2), 7)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 7), 7)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 3), 7)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(7, 1), 7) in candidate_list
+
+    def test_column_exclusion_with_cell_exclusion_in_bottom_middle_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |       |
+        |       | 6     |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |   6   |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |     3 |       |
+        |       |     8 |       |
+        +-------+-------+-------+
+        For the grid above, the value 6 has to be identified as unambiguous candidate for
+        the cell [6; 5].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 3), 6)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 4), 6)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 5), 3)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 5), 8)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(6, 5), 6) in candidate_list
+
+    def test_row_and_column_exclusion_with_cell_exclusion_in_bottom_right_region_finds_proper_unambiguous_candidate(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |     1 |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |       |       |   8   |
+        |   1   |       |       |
+        |       | 1     |       |
+        +-------+-------+-------+
+        For the grid above, the value 1 has to be identified as unambiguous candidate for
+        the cell [6; 6].
+        """
+        exclusion_logic = CandidateCellExclusionLogic()
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 8), 1)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 1), 1)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 3), 1)
+        assert candidate_list is None
+
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 7), 8)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(6, 6), 1) in candidate_list
+
+    def test_clone_reflects_the_state_of_the_original_when_further_exclusion_is_performed(self) -> None:
+        """
+        +-------+-------+-------+
+        |       |       |       |
+        |       | 4     |       |
+        |       |       |       |
+        +-------+-------+-------+
+        |   4   |       |       |
+        |       |     1 |       |
+        |       |   7 2 |       |
+        +-------+-------+-------+
+        |       |       |       |
+        |       |       |       |
+        |       |       |       |
+        +-------+-------+-------+
+        For the grid above, the value 4 has to be identified as unambiguous candidate for
+        the cell [4; 4], even if half of the exclusion is performed with one instance of
+        exclusion logic, and the other half is performed with a clone of the above mentioned
+        instance. The unambiguous candidate is identified by the clone. The original instance
+        cannot identify any unambiguous candidate.
+        """
+        original = CandidateCellExclusionLogic()
+
+        original.apply_and_exclude_cell_value(get_cell_address(1, 3), 4)
+        original.apply_and_exclude_cell_value(get_cell_address(4, 5), 1)
+        original.apply_and_exclude_cell_value(get_cell_address(5, 4), 7)
+
+        clone = original.copy()
+        clone.apply_and_exclude_cell_value(get_cell_address(3, 1), 4)
+
+        candidate_list = clone.apply_and_exclude_cell_value(get_cell_address(5, 5), 2)
+        assert len(candidate_list) == 1
+        assert UnambiguousCandidate(get_cell_address(4, 4), 4) in candidate_list
+
+    def test_exclusion_in_clone_does_not_affect_the_original(self) -> None:
+        """
+        If a clone of exclusion logic is created after several exclusions, further exclusions
+        performed upon the clone will not affect the original exclusion logic.
+        """
+        original = CandidateCellExclusionLogic()
+
+        original.apply_and_exclude_cell_value(get_cell_address(1, 3), 4)
+        original.apply_and_exclude_cell_value(get_cell_address(4, 5), 1)
+        original.apply_and_exclude_cell_value(get_cell_address(5, 4), 7)
+
+        clone = original.copy()
+        clone.apply_and_exclude_cell_value(get_cell_address(3, 1), 4)
+
+        candidate_list = original.apply_and_exclude_cell_value(get_cell_address(5, 5), 2)
+        assert candidate_list is None
