@@ -154,7 +154,7 @@ class _RegionGrid:
     aggregates 9 instances of _RegionCandidateCells.
     """
 
-    def __init__(self, value: int, regions = None) -> None:
+    def __init__(self, value: Optional[int], regions: Optional[Tuple[_RegionCandidateCells]] = None) -> None:
         if regions is None:
             self._regions = tuple([_RegionCandidateCells(row, column, value) for row in [0, 3, 6] for column in [0, 3, 6]])
         else:
@@ -193,7 +193,7 @@ class CandidateCellExclusionLogic:
         if original_exclusion_logic is None:
             self._region_grids: Tuple[_RegionGrid, ...] = tuple([_RegionGrid(value) for value in range(1, 10)])
         else:
-            self._region_grids: Tuple[_RegionGrid, ...] = tuple([grid.copy() for grid in original_exclusion_logic._region_grids])
+            self._region_grids = tuple([grid.copy() for grid in original_exclusion_logic._region_grids])
 
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
         """
