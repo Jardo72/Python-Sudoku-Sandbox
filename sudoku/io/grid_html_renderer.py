@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+from importlib.resources import as_file, files
+
 from jinja2 import Environment, BaseLoader
 
 from sudoku.grid import CellStatus
@@ -24,117 +26,10 @@ from sudoku.grid import get_cell_address
 from sudoku.search.engine import SearchSummary
 
 
-_TEMPLATE = """
-<html>
-
-<head>
-<title>Search Summary</title>
-<style>
-body {
-    background-color: #AFCEEB;
-    padding: 30px;
-}
-
-h1 {
-    font-weight: bold;
-    font-size: 140%;
-    padding-top: 10px;
-}
-
-table.summary {
-    border: 2px solid black;
-    border-collapse: collapse;
-}
-
-td.summary {
-    border: 1px solid black;
-    vertical-align: center;
-    padding: 3px 6px;
-}
-
-table.gridLayout {
-    border: 2px solid black;
-    border-collapse: collapse;
-}
-
-td.region {
-    border-style: none;
-    text-align: center;
-    vertical-align: center;
-    padding: 0px;
-}
-
-table.region {
-    border-style: none;
-    border-collapse: collapse;
-    padding: 0px;
-}
-
-td.cell {
-    border: 2px solid black;
-    border-collapse: collapse;
-
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    vertical-align: center;
-}
-
-td.predefinedCell {
-    font-weight: bold;
-    font-size: 120%;
-}
-</style>
-</head>
-
-<body>
-<h1>Summary</h1>
-<table class="summary">
-<tr>
-<td class="summary">Number of undefined cells in the puzzle</td>
-<td class="summary">{{ summary.original_undefined_cell_count }}</td>
-</tr>
-<tr>
-<td class="summary">Search algorithm</td>
-<td class="summary">{{ summary.algorithm }}</td>
-</tr>
-<tr>
-<td class="summary">Search outcome</td>
-<td class="summary">{{ summary.outcome }}</td>
-</tr>
-<tr>
-<td class="summary">Search duration [ms]</td>
-<td class="summary">{{ summary.duration_millis }}</td>
-</tr>
-<tr>
-<td class="summary">Number of tried cell values</td>
-<td class="summary">{{ summary.cell_values_tried }}</td>
-</tr>
-</table>
-
-<h1>Final Grid</h1>
-<table class='gridLayout'>
-{% for region_row in [0, 1, 2] %}
-<tr>
-{% for region_column in [0, 1, 2] %}
-<td class="region">
-<table class='region'>
-{% for row_within_region in [0, 1, 2] %}
-<tr>
-{% for column_within_region in [0, 1, 2] %}
-<td class='{{ styles[region_row * 3 + row_within_region][region_column * 3 + column_within_region]}}'>{{ values[region_row * 3 + row_within_region][region_column * 3 + column_within_region] }}</td>
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
-</td>
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
-</body>
-</html>
-"""  # noqa: E501
+def _load_template() -> str:
+    template_resource = files("sudoku.io").joinpath("html-template.j2")
+    with as_file(template_resource) as template_file:
+        return template_file.read_text()
 
 
 def render_as_html(search_summary: SearchSummary) -> str:
@@ -177,7 +72,8 @@ class _GridHtmlRenderer:
                     styles[row][column] = "cell predefinedCell"
                 else:
                     values[row][column] = ""
-        template = self._environment.from_string(_TEMPLATE)
+
+        template = self._environment.from_string(_load_template())
         return template.render(
             summary=self._search_summary,
             values=values,
