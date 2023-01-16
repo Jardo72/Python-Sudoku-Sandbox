@@ -73,10 +73,10 @@ class SearchSupport:
         self._candidate_queue = original._candidate_queue.copy()
         self._grid = original._grid.copy()
 
-    @property
-    def grid(self) -> Grid:
+    def get_grid_snapshot(self) -> Grid:
         """
-        Provides a clone of the underlying grid.
+        Creates and returns a clone of the underlying grid. Modification of the returned snapshot
+        will not impact the internal state of this object.
         """
         return self._grid.copy()
 

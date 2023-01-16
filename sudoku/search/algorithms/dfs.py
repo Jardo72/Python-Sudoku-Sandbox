@@ -129,7 +129,7 @@ class _DepthFirstSearch(AbstractSearchAlgorithm):
 
         search_support = search_support.copy()
         search_support.set_cell_value(cell_address, value)
-        self._grid_snapshot = search_support.grid
+        self._grid_snapshot = search_support.get_grid_snapshot()
         if search_support.has_completed_grid():
             _logger.info("Search completed, solution found")
             return SearchStepOutcome.SOLUTION_FOUND

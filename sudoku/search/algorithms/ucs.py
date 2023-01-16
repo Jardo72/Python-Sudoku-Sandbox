@@ -54,4 +54,4 @@ class UnambiguousCandidateSearch(AbstractSearchAlgorithm):
         return SearchStepOutcome.CONTINUE
 
     def get_grid_snapshot(self) -> Grid:
-        return self._search_support.grid
+        return self._search_support.get_grid_snapshot()
