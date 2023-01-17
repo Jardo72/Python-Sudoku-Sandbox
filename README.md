@@ -129,7 +129,7 @@ As the application is comprised of just few modules, there is no special source 
 * [sudoku.io](./sudoku/io) provides parsing of puzzles, plus rendering of grids and search summaries in text and HTML format.
 * [sudoku.search.engine](./sudoku/search/engine) contains all modules comprising the search engine.
 * [sudoku.search.util](./sudoku/search/util) provides helper classes that support implementation of search algorithms.
-* [sudoku.search.algorithm](./sudoku/search/algorithm) provides various search algorithm implementations.
+* [sudoku.search.algorithms](./sudoku/search/algorithms) provides various search algorithm implementations.
 
 Besides the packages comprising the application, there are also modules comprising the automated test suite (more details in the [Automated Test Suite](#automated-test-suite) section of this document). The automated test suite resides in subdirectories of the [tests](./tests) directory.
 
@@ -225,7 +225,7 @@ As already stated in one of the former sections of this document, when presentin
 
 #### SearchSupport
 
-Each of the search algorithms works with instance(s) of the `Grid` class as well as with instances of exclusion logic clasess provided by the [search_support](./sudoku/search/util/search_support.py) module. Therefore, the `search_support` module provides the `SearchSupport` class which aggregates and coordinates an instance of `Grid` with instances of the above mentioned exclusion logic classes. Such a design prevents code duplication and simplifies implementation of the search algorithms. Even new search algorithm implementations are supposed to use the `SearchSupport` class which is a facade encapsulating the internals of the `search_support` module. Search algorithm implementations are not permitted to use the other classes directly.
+Each of the search algorithms works with instance(s) of the `Grid` class as well as with instances of exclusion logic clasess provided by the [search_support.py](./sudoku/search/util/search_support.py) module. Therefore, the `search_support` module provides the `SearchSupport` class which aggregates and coordinates an instance of `Grid` with instances of the above mentioned exclusion logic classes. Such a design prevents code duplication and simplifies implementation of the search algorithms. Even new search algorithm implementations are supposed to use the `SearchSupport` class which is a facade encapsulating the internals of the `search_support` module. Search algorithm implementations are not permitted to use the other classes directly.
 
 
 #### Search Engine, Contract between Search Engine and Search Algorithm Implementations
@@ -239,4 +239,5 @@ The class `SearchEngine` provided by the [search_engine.py](./sudoku/search/engi
 
 Each implementation of a search algorithm must be derived from the `AbstractSearchAlgorithm` base class (see [abstract_search_algorithm.py](./sudoku/search/engine/abstract_search_algorithm.py)). Its initializer (i.e. the `__init__`) method must have only single parameter, namely the `self` reference. Any other parameters are forbidden.
 
-#### Search Algorithm Registry, Discovery of Search Algorithms
+#### Search Algorithm Registry, Discovery of Search Algorithm Implementations
+Search algorithm implementations have to reside in the [sudoku.search.algorithms](./sudoku/search/algorithms) package. In addition, they have to be annotated with the `search_algorithm` decorator provided by the [sudoku.search.engine](./sudoku/search/engine) package. If both above mentioned conditions are met for a search algorithm, the search algorithm is automatically added to search algorithm registry and thus available for use.
