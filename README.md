@@ -125,11 +125,11 @@ When implementing the project, I used Python 3.10, so this version or any higher
 As the application is comprised of just few modules, there is no special source code organization using any directory structure. The source files comprising the application are organized in several packages. Here is a brief overview of the packages and their responsibilities:
 
 * [sudoku](./sudoku) contains only one module, namely the application entry point.
-* [sudoku.grid](./sudoku.grid) contains an implementation of Sudoku grid.
-* [sudoku.io](./sudoku.io) provides parsing of puzzles, plus rendering of grids and search summaries in text and HTML format.
-* [sudoku.search.engine](./sudoku.search.engine) contains all modules comprising the search engine.
-* [sudoku.search.util](./sudoku.search.util) provides helper classes that support implementation of search algorithms.
-* [sudoku.search.algorithm](./sudoku.search.algorithm) provides various search algorithm implementations.
+* [sudoku.grid](./sudoku/grid) contains an implementation of Sudoku grid.
+* [sudoku.io](./sudoku/io) provides parsing of puzzles, plus rendering of grids and search summaries in text and HTML format.
+* [sudoku.search.engine](./sudoku/search/engine) contains all modules comprising the search engine.
+* [sudoku.search.util](./sudoku/search/util) provides helper classes that support implementation of search algorithms.
+* [sudoku.search.algorithm](./sudoku/search/algorithm) provides various search algorithm implementations.
 
 Besides the packages comprising the application, there are also modules comprising the automated test suite (more details in the [Automated Test Suite](#automated-test-suite) section of this document). The automated test suite resides in subdirectories of the [tests](./tests) directory.
 
@@ -225,21 +225,18 @@ As already stated in one of the former sections of this document, when presentin
 
 #### SearchSupport
 
-Each of the search algorithms works with instance(s) of the `Grid` class as well as with instances of exclusion logic clasess provided by the [searchsupport](./searchsupport.py) module. Therefore, the `searchsupport` module provides the `SearchSupport` class which aggregates and coordinates an instance of `Grid` with instances of the above mentioned exclusion logic classes. Such a design prevents code duplication and simplifies implementation of the search algorithms. Even new search algorithm implementations are supposed to use the `SearchSupport` class which is a facade encapsulating the internals of the `searchsupport` module. Search algorithm implementations are not permitted to use the other classes directly.
+Each of the search algorithms works with instance(s) of the `Grid` class as well as with instances of exclusion logic clasess provided by the [search_support](./sudoku/search/util/search_support.py) module. Therefore, the `search_support` module provides the `SearchSupport` class which aggregates and coordinates an instance of `Grid` with instances of the above mentioned exclusion logic classes. Such a design prevents code duplication and simplifies implementation of the search algorithms. Even new search algorithm implementations are supposed to use the `SearchSupport` class which is a facade encapsulating the internals of the `search_support` module. Search algorithm implementations are not permitted to use the other classes directly.
 
 
 #### Search Engine, Contract between Search Engine and Search Algorithm Implementations
 
-The class `SearchEngine` provided by the [search_engine.py](./sudoku/search/engine/searchengine.py) module is one of the key components of the entire application. It:
+The class `SearchEngine` provided by the [search_engine.py](./sudoku/search/engine/search_engine.py) module is one of the key components of the entire application. It:
 
 * instantiates the desired search algorithm
 * controls/drives the search by invocations of methods implemented by the search algorithm
 * measures the duration of the search and takes care for handling of timeout
 * counts the number of cell values tried
 
-Each implementation of a search algorithm must be derived from the `AbstractSearchAlgorithm` base class (see [abstract_search_algorithm.py](./sudoku/search/engine/abstract_search_algorithm.py)).
+Each implementation of a search algorithm must be derived from the `AbstractSearchAlgorithm` base class (see [abstract_search_algorithm.py](./sudoku/search/engine/abstract_search_algorithm.py)). Its initializer (i.e. the `__init__`) method must have only single parameter, namely the `self` reference. Any other parameters are forbidden.
 
-* an initializer (i.e. the `__init__`) method with one and only parameter, namely the `self` reference. Any other parameters are forbidden. This is a precondition for successfull instantiation of the search algorithm by the search engine.
-* `start` method with two parameters, namely the `self` reference and a reference to a `Grid` instance representing the puzzle to be solved. The `start` method is supposed to initialize the algorithm and prepare it for the first search step (i.e. the very first invocation of the `next_step` method). However, the `start` method is not supposed to set any cell values. The `start` method has no return value.
-* `next_step` method with `self` reference as the one and only parameter. Single invocation of this method is supposed to apply a single cell value. The search engine counts the number of invocations of the `next_step` method in order to determine the number of cell values tried by the search. This method returns one of the elements of the `SearchStepOutcome` enum (see [searchalgorithm](./searchalgorithm.py) module). If the `next_step` method cannot apply any cell value, it has to abort the search by returning one of the enum elements indicating dead end.
-* `last_step_outcome` property providing access to a `Grid` instance representing the status of the search after the last invocation of the above described `next_step` method.
+#### Search Algorithm Registry, Discovery of Search Algorithms
