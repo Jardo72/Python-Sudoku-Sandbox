@@ -26,7 +26,9 @@ from sudoku.grid import CellAddress, CellStatus, Grid
 from sudoku.grid import get_all_cell_addresses
 from .candidate_list import CandidateList
 from .candidate_query_mode import CandidateQueryMode
+from .candidate_cell_exclusion_logic import CandidateCellExclusionLogic
 from .candidate_value_exclusion_logic import CandidateValueExclusionLogic
+from .null_cell_exclusion_logic import NullCandidateCellExclusionLogic
 from .unambiguous_candidate import UnambiguousCandidate
 
 
@@ -58,18 +60,23 @@ class SearchSupport:
         return grid is None and isinstance(original, SearchSupport)
 
     def _init_from_scratch(self, grid: Grid) -> None:
-        self._exclusion_logic = CandidateValueExclusionLogic()
+        self._value_exclusion_logic = CandidateValueExclusionLogic()
+        self._cell_exclusion_logic = NullCandidateCellExclusionLogic()
         self._candidate_queue: Deque = deque()
         self._grid = grid
         for cell_address in get_all_cell_addresses():
             if grid.get_cell_status(cell_address) is CellStatus.PREDEFINED:
                 value = grid.get_cell_value(cell_address)
-                candidate_list = self._exclusion_logic.apply_and_exclude_cell_value(cell_address, value)  # type: ignore
+                candidate_list = self._value_exclusion_logic.apply_and_exclude_cell_value(cell_address, value)  # type: ignore
+                if candidate_list is not None:
+                    self._candidate_queue.extend(candidate_list)
+                candidate_list = self._cell_exclusion_logic.apply_and_exclude_cell_value(cell_address, value)  # type: ignore
                 if candidate_list is not None:
                     self._candidate_queue.extend(candidate_list)
 
     def _init_from_other_instance(self, original: SearchSupport) -> None:
-        self._exclusion_logic = original._exclusion_logic.copy()
+        self._value_exclusion_logic = original._value_exclusion_logic.copy()
+        self._cell_exclusion_logic = original._cell_exclusion_logic.copy()
         self._candidate_queue = original._candidate_queue.copy()
         self._grid = original._grid.copy()
 
@@ -101,8 +108,12 @@ class SearchSupport:
                                 puzzle or completed during the search.
         """
         self._grid.set_cell_value(cell_address, value)
-        candidate_list = self._exclusion_logic.apply_and_exclude_cell_value(cell_address, value)
-        _logger.info("Assignment %s = %d completed, outcome of exclusion is %s", cell_address, value, candidate_list)
+        candidate_list = self._value_exclusion_logic.apply_and_exclude_cell_value(cell_address, value)
+        _logger.info("Assignment %s = %d completed, outcome of value exclusion is %s", cell_address, value, candidate_list)
+        if candidate_list is not None:
+            self._candidate_queue.extend(candidate_list)
+        candidate_list = self._cell_exclusion_logic.apply_and_exclude_cell_value(cell_address, value)
+        _logger.info("Assignment %s = %d completed, outcome of cell exclusion is %s", cell_address, value, candidate_list)
         if candidate_list is not None:
             self._candidate_queue.extend(candidate_list)
 
@@ -131,7 +142,7 @@ class SearchSupport:
             cell_status = self._grid.get_cell_status(cell_address)
             if cell_status is not CellStatus.UNDEFINED:
                 continue
-            if self._exclusion_logic.get_applicable_value_count(cell_address) == 0:
+            if self._value_exclusion_logic.get_applicable_value_count(cell_address) == 0:
                 _logger.info("Cell %s undefined, but there are no applicable candidates", cell_address)
                 return True
         return False
@@ -145,7 +156,7 @@ class SearchSupport:
         while len(self._candidate_queue) > 0:
             candidate = self._candidate_queue.popleft()
             _logger.debug("Candidate taken from queue: %s", candidate)
-            if self._exclusion_logic.is_applicable(candidate):
+            if self._value_exclusion_logic.is_applicable(candidate):
                 _logger.debug("Candidate still applicable, going to return it")
                 return candidate
             else:
@@ -161,7 +172,7 @@ class SearchSupport:
                      which of the undefined cells of the underlying grid is to be
                      taken into account.
         """
-        result = self._exclusion_logic.get_undefined_cell_candidates(mode)
+        result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:
             _logger.info("Undefined cell candidates found (mode = %s): %s", mode, result)
             assert self._grid.get_cell_status(result.cell_address) is CellStatus.UNDEFINED

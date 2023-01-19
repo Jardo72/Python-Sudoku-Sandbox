@@ -23,6 +23,7 @@ from typing import List, Optional, Tuple
 
 from sudoku.grid import CellAddress
 from sudoku.grid import get_cell_address
+from .abstract_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
 from .exclusion_outcome import ExclusionOutcome
 from .unambiguous_candidate import UnambiguousCandidate
 
@@ -182,7 +183,7 @@ class _RegionGrid:
         return _RegionGrid(None, regions_copy)
 
 
-class CandidateCellExclusionLogic:
+class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
     """
     Logic responsible for exclusion of candidate cells where a particular value is
     not applicable. The exclusion leads to identification of the only cell within
@@ -198,7 +199,7 @@ class CandidateCellExclusionLogic:
         else:
             self._region_grids = tuple([grid.copy() for grid in original_exclusion_logic._region_grids])
 
-    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
         """
         Applies the given cell value to the cell with the given coordinates and excludes
         all peers of the given cell as candidate cells for the given value.
