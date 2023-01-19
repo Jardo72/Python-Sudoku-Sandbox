@@ -24,6 +24,7 @@ from typing import Deque, Optional
 
 from sudoku.grid import CellAddress, CellStatus, Grid
 from sudoku.grid import get_all_cell_addresses
+from .abstract_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
 from .candidate_list import CandidateList
 from .candidate_query_mode import CandidateQueryMode
 from .candidate_cell_exclusion_logic import CandidateCellExclusionLogic
@@ -59,9 +60,12 @@ class SearchSupport:
     def _is_copy_constructor(grid: Optional[Grid], original: Optional[SearchSupport]) -> bool:
         return grid is None and isinstance(original, SearchSupport)
 
+    def _create_candidate_cell_exclusion_logic(self) -> AbstractCandidateCellExclusionLogic:
+        return NullCandidateCellExclusionLogic()
+
     def _init_from_scratch(self, grid: Grid) -> None:
         self._value_exclusion_logic = CandidateValueExclusionLogic()
-        self._cell_exclusion_logic = NullCandidateCellExclusionLogic()
+        self._cell_exclusion_logic = self._create_candidate_cell_exclusion_logic()
         self._candidate_queue: Deque = deque()
         self._grid = grid
         for cell_address in get_all_cell_addresses():
@@ -192,3 +196,12 @@ class SearchSupport:
                            not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)
+
+
+class AdvancedSearchSupport(SearchSupport):
+
+    def __init__(self, grid: Optional[Grid] = None, original: Optional[AdvancedSearchSupport] = None) -> None:
+        super().__init__(grid, original)
+
+    def _create_candidate_cell_exclusion_logic(self) -> AbstractCandidateCellExclusionLogic:
+        return CandidateCellExclusionLogic()
