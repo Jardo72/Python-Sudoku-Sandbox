@@ -122,7 +122,7 @@ When implementing the project, I used Python 3.10, so this version or any higher
 * [colorama](https://pypi.org/project/colorama/) is used for coloring/highlighting of stdout.
 * [jinja2](https://pypi.org/project/Jinja2/) is used for generation of HTML outputs.
 
-As the application is comprised of just few modules, there is no special source code organization using any directory structure. The source files comprising the application are organized in several packages. Here is a brief overview of the packages and their responsibilities:
+The source files comprising the application are organized in several packages. Here is a brief overview of the packages and their responsibilities:
 
 * [sudoku](./sudoku) contains only one module, namely the application entry point.
 * [sudoku.grid](./sudoku/grid) contains an implementation of Sudoku grid.
@@ -200,7 +200,8 @@ python -m pytest ./tests/integration
 
 The project also invlves test data for manual testing. The [test-data](./test-data) directory contains several subdirectories containing input files with puzzles. There are several types of puzzles, and each type has its own directory.
 
-* The [test-data/unambiguous](./test-data/unambiguous) directory contains puzzles which are unambiguous. Even the Unabiguous Candidate Search (UCS) described in one of the subsequent sections of this document can solve these puzzles.
+* The [test-data/unambiguous-simple](./test-data/unambiguous-simple) directory contains puzzles which are unambiguous. Even the Basic Unambiguous Candidate Search (Basic-UCS) algorithm described in one of the subsequent sections of this document can solve these puzzles.
+* The [test-data/unambiguous-advanced](./test-data/unambiguous-advanced) directory contains puzzles which are unambiguous. The Basic Unambiguous Candidate Search (Basic-UCS) algorithm is not able to solve these puzzle. However, the Advanced Unambiguous Candidate Search (Advanced-UCS) algorithm described in one of the subsequent sections of this document can solve these puzzles.
 * The [test-data/ambiguous](./test-data/ambiguous) directory contains puzzles which are ambiguous. These can only be solved by brute force algorithms which are able to deal with the situation when for each of the undefined cells, at least two candidate values are applicable.
 * The [test-data/puzzle-dead-end](./test-data/puzzle-dead-end) directory contains puzzles which cannot be solved, regardless of the search algorithm used. The reason for the dead end is the fact that these puzzles contain an undefined cell for which no value is applicable. For such a cell, each of the nine values is already present in the row, the column, or the region containing the cell.
 
