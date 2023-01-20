@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-from sudoku.grid import CellAddress
 from sudoku.grid import get_cell_address
 from sudoku.search.util import CandidateList
 from sudoku.search.util import CandidateQueryMode
@@ -56,17 +55,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=2), 5) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=0), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=7), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=4), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=1), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=8), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=3), 8) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 2), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 0), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 7), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 4), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 1), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 8), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 3), 8) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=5), 4)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 5), 4)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=0, column=6), 2) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(0, 6), 2) in candidate_list
 
     def test_pure_row_exclusion_in_bottom_row_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -88,17 +87,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=7), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=0), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=3), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=8), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=1), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=6), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=4), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 7), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 0), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 3), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 8), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 1), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 6), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 4), 4) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=5), 8)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 5), 8)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=8, column=2), 5) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(8, 2), 5) in candidate_list
 
     def test_pure_column_exclusion_in_leftmost_column_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -120,17 +119,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=0), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=0), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=0), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=0), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=0), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=0), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=0), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 0), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 0), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 0), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 0), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 0), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 0), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 0), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=0), 8)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 0), 8)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=6, column=0), 4) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(6, 0), 4) in candidate_list
 
     def test_pure_column_exclusion_in_rightmost_column_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -152,17 +151,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=8), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=8), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=8), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=8), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=8), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=8), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=8), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 8), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 8), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 8), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 8), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 8), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 8), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 8), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=8), 8)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 8), 8)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=8, column=8), 1) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(8, 8), 1) in candidate_list
 
     def test_pure_region_exclusion_in_upper_left_region_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -184,17 +183,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=0), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=2), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=1), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=0), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=2), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=1), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=2), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 0), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 2), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 1), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 0), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 2), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 1), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 2), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=0), 8)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 0), 8)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=2, column=1), 7) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(2, 1), 7) in candidate_list
 
     def test_pure_region_exclusion_in_upper_right_region_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -216,17 +215,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=7), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=8), 3) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=6), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=6), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=6), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=7), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=7), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 7), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 8), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 6), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 6), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 6), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 7), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 7), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=8), 8)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 8), 8)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=0, column=8), 6) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(0, 8), 6) in candidate_list
 
     def test_pure_region_exclusion_in_bottom_left_region_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -248,17 +247,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=1), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=1), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=0), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=2), 2) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=0), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=2), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=2), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 1), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 1), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 0), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 2), 2) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 0), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 2), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 2), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=0), 3)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 0), 3)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=7, column=1), 8) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(7, 1), 8) in candidate_list
 
     def test_pure_region_exclusion_in_bottom_right_region_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -280,17 +279,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=6), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=6), 8) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=8), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=8), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=7), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=7), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=6), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 6), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 6), 8) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 8), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 8), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 7), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 7), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 6), 5) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=7), 2)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 7), 2)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=8, column=8), 3) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(8, 8), 3) in candidate_list
 
     def test_combination_of_row_and_column_exclusion_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -312,17 +311,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=5), 5) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=8), 8) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=6), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=3), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=3), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=3), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=1), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 5), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 8), 8) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 6), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 3), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 3), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 3), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 1), 3) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=3), 2)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 3), 2)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=4, column=3), 6) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(4, 3), 6) in candidate_list
 
     def test_combination_of_row_and_region_exclusion_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -344,17 +343,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=8), 5) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=7), 8) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=7), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=6), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=8), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=0), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=2), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 8), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 7), 8) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 7), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 6), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 8), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 0), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 2), 3) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=5), 2)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 5), 2)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=3, column=6), 9) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(3, 6), 9) in candidate_list
 
     def test_combination_of_column_and_region_exclusion_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -376,17 +375,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=5), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=4), 8) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=4), 5) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=3), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=3), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=3), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=3), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 5), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 4), 8) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 4), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 3), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 3), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 3), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 3), 3) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=3), 2)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 3), 2)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=4, column=3), 1) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(4, 3), 1) in candidate_list
 
     def test_combination_of_row_and_column_and_region_exlusion_finds_proper_unambiguous_candidate(self) -> None:
         """
@@ -408,17 +407,17 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=1), 9) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=2), 1) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=0), 5) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=8), 6) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=2), 4) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=4), 7) is None
-        assert exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=2), 3) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 1), 9) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 2), 1) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 0), 5) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 8), 6) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 2), 4) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 4), 7) is None
+        assert exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 2), 3) is None
 
-        candidate_list = exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=1), 2)
+        candidate_list = exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 1), 2)
         assert len(candidate_list) == 1
-        assert UnambiguousCandidate(CellAddress(row=6, column=2), 8) in candidate_list
+        assert UnambiguousCandidate(get_cell_address(6, 2), 8) in candidate_list
 
     def test_candidates_for_first_undefined_cell_reflect_exclusion(self) -> None:
         """
@@ -440,13 +439,13 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=3), 7)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=0), 2)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=1), 9)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=1), 4)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 3), 7)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 0), 2)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 1), 9)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 1), 4)
 
         actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(CandidateQueryMode.FIRST_UNDEFINED_CELL)
-        expected_candidate_list = CandidateList(CellAddress(row=0, column=0), (1, 3, 5, 6, 8))
+        expected_candidate_list = CandidateList(get_cell_address(0, 0), (1, 3, 5, 6, 8))
         assert actual_candidate_list == expected_candidate_list
 
     def test_candidates_for_undefined_cell_with_least_candidates_reflect_exclusion(self) -> None:
@@ -470,26 +469,26 @@ class TestCandidateValueExclusionLogic:
         """
         exclusion_logic = CandidateValueExclusionLogic()
 
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=0, column=3), 7)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=1), 9)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=1, column=8), 3)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=2, column=1), 4)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=4, column=8), 2)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=5, column=0), 2)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=6, column=6), 7)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=7, column=8), 1)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=2), 5)
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=8, column=5), 9)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(0, 3), 7)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 1), 9)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(1, 8), 3)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(2, 1), 4)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(4, 8), 2)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(5, 0), 2)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(6, 6), 7)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(7, 8), 1)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 2), 5)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 5), 9)
 
         actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(CandidateQueryMode.UNDEFINED_CELL_WITH_LEAST_CANDIDATES)
-        expected_candidate_list = CandidateList(CellAddress(row=8, column=8), (4, 6, 8))
+        expected_candidate_list = CandidateList(get_cell_address(8, 8), (4, 6, 8))
         assert actual_candidate_list == expected_candidate_list
 
     def test_no_value_is_applicable_to_cell_whose_value_has_been_already_set(self) -> None:
         exclusion_logic = CandidateValueExclusionLogic()
-        exclusion_logic.apply_and_exclude_cell_value(CellAddress(row=3, column=2), 5)
+        exclusion_logic.apply_and_exclude_cell_value(get_cell_address(3, 2), 5)
         for value in range(1, 10):
-            candidate = UnambiguousCandidate(CellAddress(row=3, column=2), value)
+            candidate = UnambiguousCandidate(get_cell_address(3, 2), value)
             assert not exclusion_logic.is_applicable(candidate)
 
     def test_applicability_of_value_reflects_former_exclusions(self) -> None:
