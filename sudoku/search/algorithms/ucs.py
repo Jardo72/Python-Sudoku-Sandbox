@@ -17,23 +17,32 @@
 # limitations under the License.
 #
 
+from abc import ABC
+from abc import abstractmethod
 from logging import getLogger
 
 from sudoku.grid import Grid
 from sudoku.search.engine import AbstractSearchAlgorithm, SearchStepOutcome
 from sudoku.search.engine import search_algorithm
-from sudoku.search.util import SearchSupport
+from sudoku.search.util import AdvancedSearchSupport, SearchSupport
 
 
 _logger = getLogger(__name__)
 
 
-@search_algorithm("UCS")
-class UnambiguousCandidateSearch(AbstractSearchAlgorithm):
+class _UnambiguousCandidateSearch(AbstractSearchAlgorithm):
+    """
+    Base class providing functionality common to both unambiguous candidate search (UCS)
+    implementations of search algorithm.
+    """
+
+    @abstractmethod
+    def _create_search_support(self, puzzle: Grid) -> SearchSupport:
+        ...
 
     def initialize(self, puzzle: Grid) -> None:
         _logger.info("Starting the search")
-        self._search_support = SearchSupport(grid=puzzle)
+        self._search_support = self._create_search_support(puzzle)
 
     def apply_cell_value(self) -> SearchStepOutcome:
         _logger.info("Starting the next search step")
@@ -55,3 +64,17 @@ class UnambiguousCandidateSearch(AbstractSearchAlgorithm):
 
     def get_grid_snapshot(self) -> Grid:
         return self._search_support.get_grid_snapshot()
+
+
+@search_algorithm("Basic-UCS")
+class BasicUnambiguousCandidateSearch(_UnambiguousCandidateSearch):
+
+    def _create_search_support(self, puzzle: Grid) -> SearchSupport:
+        return SearchSupport(grid=puzzle)
+
+
+@search_algorithm("Advanced-UCS")
+class AdvancedUnambiguousCandidateSearch(_UnambiguousCandidateSearch):
+
+    def _create_search_support(self, puzzle: Grid) -> SearchSupport:
+        return AdvancedSearchSupport(grid=puzzle)

@@ -23,7 +23,7 @@ from typing import List, Optional, Tuple
 
 from sudoku.grid import CellAddress
 from sudoku.grid import get_cell_address
-from .abstract_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
+from .abstract_candidate_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
 from .exclusion_outcome import ExclusionOutcome
 from .unambiguous_candidate import UnambiguousCandidate
 

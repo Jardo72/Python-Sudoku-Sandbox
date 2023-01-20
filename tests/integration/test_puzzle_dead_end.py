@@ -24,7 +24,7 @@ from sudoku.search.engine import SearchOutcome
 from commons import TestSearchEngine
 
 
-_algorithms = ["UCS", "Smart-BFS", "Naive-BFS", "Smart-DFS", "Naive-DFS"]
+_algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-BFS", "Naive-BFS", "Smart-DFS", "Naive-DFS"]
 
 
 class TestPuzzleDeadEnd:

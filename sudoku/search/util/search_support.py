@@ -24,10 +24,9 @@ from typing import Deque, Optional
 
 from sudoku.grid import CellAddress, CellStatus, Grid
 from sudoku.grid import get_all_cell_addresses
-from .abstract_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
+from .abstract_candidate_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
 from .candidate_list import CandidateList
 from .candidate_query_mode import CandidateQueryMode
-from .candidate_cell_exclusion_logic import CandidateCellExclusionLogic
 from .candidate_value_exclusion_logic import CandidateValueExclusionLogic
 from .null_cell_exclusion_logic import NullCandidateCellExclusionLogic
 from .unambiguous_candidate import UnambiguousCandidate
@@ -197,11 +196,3 @@ class SearchSupport:
         """
         return SearchSupport(original=self)
 
-
-class AdvancedSearchSupport(SearchSupport):
-
-    def __init__(self, grid: Optional[Grid] = None, original: Optional[AdvancedSearchSupport] = None) -> None:
-        super().__init__(grid, original)
-
-    def _create_candidate_cell_exclusion_logic(self) -> AbstractCandidateCellExclusionLogic:
-        return CandidateCellExclusionLogic()

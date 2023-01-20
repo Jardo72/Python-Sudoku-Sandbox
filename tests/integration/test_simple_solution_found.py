@@ -25,7 +25,7 @@ from commons import TestSearchEngine
 from commons import _assert_are_equivalent
 
 
-_algorithms = ["UCS", "Smart-DFS", "Smart-BFS", "Naive-DFS", "Naive-BFS"]
+_algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-DFS", "Smart-BFS", "Naive-DFS", "Naive-BFS"]
 
 _DURATION_MILLIS = 50
 

@@ -21,7 +21,7 @@ from __future__ import annotations
 from typing import List, Optional
 
 from sudoku.grid import CellAddress
-from .abstract_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
+from .abstract_candidate_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
 from .unambiguous_candidate import UnambiguousCandidate
 
 

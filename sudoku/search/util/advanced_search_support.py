@@ -17,8 +17,19 @@
 # limitations under the License.
 #
 
-from .advanced_search_support import AdvancedSearchSupport  # noqa: F401
-from .candidate_list import CandidateList  # noqa: F401
-from .candidate_query_mode import CandidateQueryMode  # noqa: F401
-from .search_support import SearchSupport  # noqa: F401
-from .unambiguous_candidate import UnambiguousCandidate  # noqa: F401
+from __future__ import annotations
+from typing import Optional
+
+from sudoku.grid import Grid
+from .abstract_candidate_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
+from .candidate_cell_exclusion_logic import CandidateCellExclusionLogic
+from .search_support import SearchSupport
+
+
+class AdvancedSearchSupport(SearchSupport):
+
+    def __init__(self, grid: Optional[Grid] = None, original: Optional[AdvancedSearchSupport] = None) -> None:
+        super().__init__(grid, original)
+
+    def _create_candidate_cell_exclusion_logic(self) -> AbstractCandidateCellExclusionLogic:
+        return CandidateCellExclusionLogic()
