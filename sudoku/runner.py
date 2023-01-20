@@ -25,7 +25,6 @@ from traceback import print_exc
 
 from colorama import init as init_colorama
 
-from sudoku.grid import Grid
 from sudoku.io import InvalidInputError
 from sudoku.io import read_from_file, render_as_html, render_as_text
 from sudoku.search.engine import InvalidPuzzleError, NoSuchAlgorithmError, SearchAlgorithmRegistry, SearchSummary
@@ -152,9 +151,9 @@ def print_search_summary(search_summary: SearchSummary, use_color: bool) -> None
         print()
 
 
-def generate_html_file(grid: Grid, filename: str) -> None:
+def generate_html_file(search_summary: SearchSummary, filename: str) -> None:
     with open(filename, "w") as output_file:
-        html_content = render_as_html(grid)
+        html_content = render_as_html(search_summary)
         output_file.write(html_content)
 
 
@@ -167,7 +166,7 @@ def main() -> None:
         search_summary = find_solution(puzzle_cell_values, command_line_arguments.algorithm, command_line_arguments.timeout_sec)
         print_search_summary(search_summary, use_color=not command_line_arguments.no_color)
         if command_line_arguments.output_html_file:
-            generate_html_file(search_summary.final_grid, command_line_arguments.output_html_file)
+            generate_html_file(search_summary, command_line_arguments.output_html_file)
     except InvalidInputError as e:
         print()
         print(f"Failed to parse the input file {command_line_arguments.input_file}: {str(e)}")

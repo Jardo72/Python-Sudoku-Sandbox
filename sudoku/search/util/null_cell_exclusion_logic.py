@@ -17,8 +17,22 @@
 # limitations under the License.
 #
 
-from .advanced_search_support import AdvancedSearchSupport  # noqa: F401
-from .candidate_list import CandidateList  # noqa: F401
-from .candidate_query_mode import CandidateQueryMode  # noqa: F401
-from .search_support import SearchSupport  # noqa: F401
-from .unambiguous_candidate import UnambiguousCandidate  # noqa: F401
+from __future__ import annotations
+from typing import List, Optional
+
+from sudoku.grid import CellAddress
+from .abstract_candidate_cell_exclusion_logic import AbstractCandidateCellExclusionLogic
+from .unambiguous_candidate import UnambiguousCandidate
+
+
+class NullCandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
+    """
+    Empty implementation of candidate cell exclusion logic.
+    """
+
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
+        return None
+
+    def copy(self) -> AbstractCandidateCellExclusionLogic:
+        # no reason to create a new instance as this class is stateless
+        return self

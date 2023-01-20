@@ -17,8 +17,10 @@
 # limitations under the License.
 #
 
-from .advanced_search_support import AdvancedSearchSupport  # noqa: F401
-from .candidate_list import CandidateList  # noqa: F401
-from .candidate_query_mode import CandidateQueryMode  # noqa: F401
-from .search_support import SearchSupport  # noqa: F401
-from .unambiguous_candidate import UnambiguousCandidate  # noqa: F401
+
+class InvalidInputError(Exception):
+    """
+    Raised to inidicate that the function read_from_file or read_from_string has encountered
+    an invalid input.
+    """
+    pass

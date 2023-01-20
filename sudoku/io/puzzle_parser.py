@@ -18,16 +18,9 @@
 #
 
 from io import StringIO, TextIOWrapper
-
 from typing import List
 
-
-class InvalidInputError(Exception):
-    """
-    Raised to inidicate that the function read_from_file or read_from_string has encountered
-    an invalid input.
-    """
-    pass
+from .invalid_input_error import InvalidInputError
 
 
 class _PuzzleParser:

@@ -18,40 +18,18 @@
 #
 
 from __future__ import annotations
-from enum import Enum, unique
 from logging import getLogger
 from typing import List, Optional, Tuple
 
 from sudoku.grid import CellAddress
 from sudoku.grid import get_all_cell_addresses, get_peer_addresses
+from .exclusion_outcome import ExclusionOutcome
 from .candidate_list import CandidateList
 from .candidate_query_mode import CandidateQueryMode
 from .unambiguous_candidate import UnambiguousCandidate
 
 
 _logger = getLogger(__name__)
-
-
-@unique
-class _ExclusionOutcome(Enum):
-    """
-    Defines possible outcomes of an exclusion, for instance an exclusion of a candidate
-    value for a single undefined cell. The meaning of particular enum elements is the
-    following:
-    * UNAMBIGUOUS_CANDIDATE_FOUND indicates that after the exclusion of a candidate, there
-      is only single applicable candidate remaining. This outcome inidcates that an
-      unambiguous candidate has been found by the exclusion.
-    * UNAMBIGUOUS_CANDIDATE_NOT_FOUND indicates that the exclusion has not identified an
-      unambiguous candidate. This value is to be used in several situations, for instance
-      if two or more applicable candidates are still remaining after the exclusion, or if
-      the exclusion of a candidate has not changed the set of candidates as the candidate
-      was already excluded.
-    This enum is internal, there is no need to use it directly in other modules.
-    """
-
-    UNAMBIGUOUS_CANDIDATE_FOUND = 1
-
-    UNAMBIGUOUS_CANDIDATE_NOT_FOUND = 2
 
 
 class _CandidateValues:
@@ -88,7 +66,7 @@ class _CandidateValues:
         result = [value for value in range(1, 10) if self._bitmask & (1 << (value - 1))]
         return tuple(result)
 
-    def exclude_value(self, value: int) -> _ExclusionOutcome:
+    def exclude_value(self, value: int) -> ExclusionOutcome:
         _logger.debug("Going to exclude the value %d, bitmask before exclusion = %s", value, format(self._bitmask, "b"))
         value_mask = 1 << (value - 1)
         if self._bitmask & value_mask == value_mask:
@@ -96,10 +74,11 @@ class _CandidateValues:
             _logger.debug("Bitmask after exclusion = %s", format(self._bitmask, "b"))
             self._applicable_value_count -= 1
             if self._applicable_value_count == 1:
-                return _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND
-        return _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
+                return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND
+        return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
+        # TODO: use assert
         if self._applicable_value_count != 1:
             message = f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
             raise RuntimeError(message)
@@ -126,9 +105,9 @@ class CandidateValueExclusionLogic:
     Logic responsible for exclusion of candidate values inapplicable to particular cells.
     For instance, if the value of a cell is set to 5, the value 5 is excluded for all
     cells within the same row, column, and region. If a single candidate value remains
-    applicable to a cell, that value is considered as unambiguous candidate for that
-    cell. This class is an internal helper which should not be used directly by other
-    modules.
+    applicable to a cell (i.e. all other candidate values have been excluded), that value
+    is considered as unambiguous candidate for that cell. This class is an internal helper
+    which should not be used directly by other packages.
     """
 
     def __init__(self, original: Optional[CandidateValueExclusionLogic] = None) -> None:
@@ -156,15 +135,15 @@ class CandidateValueExclusionLogic:
         Applies the given cell value to the cell with the given coordinates and excludes
         the given cell value for the peers of the cell with the coordinates.
 
-        Parameters:
-            cell_address (CellAddress):    The coordinates of the cell the given value is to
-                                           be applied to.
-            value (int):                   The value for the given cell.
+            Parameters:
+                cell_address (CellAddress):    The coordinates of the cell the given value is to
+                                            be applied to.
+                value (int):                   The value for the given cell.
 
-        Returns:
-            List of UnambiguousCandidate instances, one for each of those peers of the concerned
-            cell for which just a single applicable candidate value has remained after the
-            exclusion. None is returned if there is no such peer.
+            Returns:
+                List of UnambiguousCandidate instances, one for each of those peers of the concerned
+                cell for which just a single applicable candidate value has remained after the
+                exclusion. None is returned if there is no such peer.
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to apply candidate value %d to cell [%d, %d]", value, row, column)
@@ -175,7 +154,7 @@ class CandidateValueExclusionLogic:
             _logger.debug("Going to exclude candidate value %d for cell [%d, %d]", value, row, column)
             exclusion_outcome = self._candidates[row][column].exclude_value(value)
             _logger.debug("Exclusion outcome = %s", exclusion_outcome)
-            if exclusion_outcome is _ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND:
+            if exclusion_outcome is ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND:
                 result = result or []
                 candidate = UnambiguousCandidate(peer_address, self._candidates[row][column].get_single_remaining_applicable_value())
                 result.append(candidate)
@@ -243,13 +222,13 @@ class CandidateValueExclusionLogic:
         Returns the number of candidate values applicable to the cell with the given
         coordinates.
 
-        Parameters:
-            cell_address (CellAddress):    The coordinates of the cell for which the number of
-                                           applicable candidate values is to be returned.
+            Parameters:
+                cell_address (CellAddress):    The coordinates of the cell for which the number of
+                                            applicable candidate values is to be returned.
 
-        Returns:
-            int:    The number of candidate values which are still applicable (i.e. have not
-                    been excluded yet) to the cell with the given coordinates.
+            Returns:
+                int:    The number of candidate values which are still applicable (i.e. have not
+                        been excluded yet) to the cell with the given coordinates.
         """
         return self._candidates[cell_address.row][cell_address.column].applicable_value_count
 
@@ -258,10 +237,10 @@ class CandidateValueExclusionLogic:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-        Returns:
-            CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
-                                          the returned object is semantically equivalent to deep copy
-                                          of this object. In other words, any modification of the clone will
-                                          not change the status of this object and vice versa.
+            Returns:
+                CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
+                                              the returned object is semantically equivalent to deep copy
+                                              of this object. In other words, any modification of the clone will
+                                              not change the status of this object and vice versa.
         """
         return CandidateValueExclusionLogic(self)

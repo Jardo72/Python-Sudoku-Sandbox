@@ -60,7 +60,7 @@ class TestAlgorithmDeadEnd:
 | 7     |     4 |       |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -96,7 +96,7 @@ class TestAlgorithmDeadEnd:
 | 4     |       |   1   |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -132,7 +132,7 @@ class TestAlgorithmDeadEnd:
 |     1 | 3     |       |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -168,7 +168,7 @@ class TestAlgorithmDeadEnd:
 |       |   9   |     4 |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -204,7 +204,7 @@ class TestAlgorithmDeadEnd:
 |       | 6     |       |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -240,7 +240,7 @@ class TestAlgorithmDeadEnd:
 |     9 |     7 | 3     |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)
@@ -276,7 +276,7 @@ class TestAlgorithmDeadEnd:
 |       |       |     9 |
 +-------+-------+-------+
 """
-        test_summary = TestSearchEngine.find_solution(puzzle, "UCS")
+        test_summary = TestSearchEngine.find_solution(puzzle, "Basic-UCS")
 
         assert test_summary.search_summary.outcome == SearchOutcome.ALGORITHM_DEAD_END
         _assert_are_equivalent(expected_final_grid, test_summary.final_grid)

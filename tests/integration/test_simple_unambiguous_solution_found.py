@@ -25,16 +25,17 @@ from commons import TestSearchEngine
 from commons import _assert_are_equivalent
 
 
-_algorithms = ["UCS", "Smart-DFS", "Smart-BFS"]
+_algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-DFS", "Smart-BFS"]
 
 
-_DURATION_MILLIS = 50
+_DURATION_MILLIS = 100
 
 
-class TestUnambiguousPuzzleSolution:
+class TestSimpleUnambiguousPuzzleSolutionFound:
     """
     Collection of integration tests covering the case when an unambiguous puzzle is successfully
-    solved by various search algorithms.
+    solved by various search algorithms. The puzzles used by this test fixture are rather simple
+    to that even the Basic-UCS algorithm is able to solve them.
     """
 
     @mark.parametrize("algorithm_name", _algorithms)

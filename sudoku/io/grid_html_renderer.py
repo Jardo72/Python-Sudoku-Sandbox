@@ -17,84 +17,22 @@
 # limitations under the License.
 #
 
+from importlib.resources import as_file, files
+
 from jinja2 import Environment, BaseLoader
 
-from sudoku.grid import CellStatus, Grid
+from sudoku.grid import CellStatus
 from sudoku.grid import get_cell_address
+from sudoku.search.engine import SearchSummary
 
 
-_TEMPLATE = """
-<html>
-
-<head>
-<title>Search Summary</title>
-<style>
-body {
-    background-color: #DDDDFF;
-    padding: 30px;
-}
-
-table.gridLayout {
-    border: 2px solid black;
-    border-collapse: collapse;
-}
-
-td.region {
-    border-style: none;
-    text-align: center;
-    vertical-align: center;
-    padding: 0px
-}
-
-table.region {
-    border-style: none;
-    border-collapse: collapse;
-    padding: 0px
-}
-
-td.cell {
-    border: 2px solid black;
-    border-collapse: collapse;
-
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    vertical-align: center;
-}
-
-td.predefinedCell {
-    font-weight: bold;
-    font-size: 120%;
-}
-</style>
-</head>
-
-<body>
-<table class='gridLayout'>
-{% for region_row in [0, 1, 2] %}
-<tr>
-{% for region_column in [0, 1, 2] %}
-<td class="region">
-<table class='region'>
-{% for row_within_region in [0, 1, 2] %}
-<tr>
-{% for column_within_region in [0, 1, 2] %}
-<td class='{{ styles[region_row * 3 + row_within_region][region_column * 3 + column_within_region]}}'>{{ values[region_row * 3 + row_within_region][region_column * 3 + column_within_region] }}</td>
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
-</td>
-{% endfor %}
-</tr>
-{% endfor %}
-</table>
-</body>
-</html>
-"""  # noqa: E501
+def _load_template() -> str:
+    template_resource = files("sudoku.io").joinpath("html-template.j2")
+    with as_file(template_resource) as template_file:
+        return template_file.read_text()
 
 
-def render_as_html(grid: Grid) -> str:
+def render_as_html(search_summary: SearchSummary) -> str:
     """
     Generates and returns HTML representation of the given grid.
 
@@ -104,7 +42,7 @@ def render_as_html(grid: Grid) -> str:
     Returns:
         str: The generated HTML representation of the given grid.
     """
-    renderer = _GridHtmlRenderer(grid)
+    renderer = _GridHtmlRenderer(search_summary)
     return renderer.render()
 
 
@@ -114,24 +52,32 @@ class _GridHtmlRenderer:
     generate an HTML grid presenting the cell values of the given grid.
     """
 
-    def __init__(self, grid: Grid) -> None:
-        self._grid = grid
+    def __init__(self, search_summary: SearchSummary) -> None:
+        self._search_summary = search_summary
         self._environment = Environment(loader=BaseLoader())
 
     def render(self) -> str:
         values = [["" for column in range(9)] for row in range(9)]
         styles = [["" for column in range(9)] for row in range(9)]
+        grid = self._search_summary.final_grid
         for row in range(9):
             for column in range(9):
                 cell_address = get_cell_address(row, column)
-                cell_status = self._grid.get_cell_status(cell_address)
+                cell_status = grid.get_cell_status(cell_address)
                 styles[row][column] = "cell"
                 if cell_status == CellStatus.COMPLETED:
-                    values[row][column] = str(self._grid.get_cell_value(cell_address))
+                    values[row][column] = str(grid.get_cell_value(cell_address))
                 elif cell_status == CellStatus.PREDEFINED:
-                    values[row][column] = str(self._grid.get_cell_value(cell_address))
+                    values[row][column] = str(grid.get_cell_value(cell_address))
                     styles[row][column] = "cell predefinedCell"
                 else:
                     values[row][column] = ""
-        template = self._environment.from_string(_TEMPLATE)
-        return template.render(values=values, styles=styles, trim_blocks=True, lstrip_blocks=True)
+
+        template = self._environment.from_string(_load_template())
+        return template.render(
+            summary=self._search_summary,
+            values=values,
+            styles=styles,
+            trim_blocks=True,
+            lstrip_blocks=True
+        )
