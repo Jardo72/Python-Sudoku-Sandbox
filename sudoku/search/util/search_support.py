@@ -60,6 +60,12 @@ class SearchSupport:
         return grid is None and isinstance(original, SearchSupport)
 
     def _create_candidate_cell_exclusion_logic(self) -> AbstractCandidateCellExclusionLogic:
+        """
+        Creates and returns a new instance of candidate cell exclusion logic. This is a default
+        implementation of this method which returns an empty implementation of candidate cell
+        exclusion logic which simply does nothing. Derived classes can override this method
+        and thus incorporate real implementations of candidate cell exclusion logic.
+        """
         return NullCandidateCellExclusionLogic()
 
     def _init_from_scratch(self, grid: Grid) -> None:
@@ -170,10 +176,14 @@ class SearchSupport:
         """
         Returns candidate values applicable to one of the undefined cells of the
         underlying grid.
-        Args:
-            mode:    One of the elements of the CandidateQueryMode enum determining
-                     which of the undefined cells of the underlying grid is to be
-                     taken into account.
+
+            Parameters:
+                mode (CandidateQueryMode):    One of the elements of the CandidateQueryMode enum
+                                              determining which of the undefined cells of the underlying
+                                              grid is to be taken into account.
+
+            Returns:
+                CandidateList:
         """
         result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:
@@ -188,10 +198,10 @@ class SearchSupport:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-        Returns:
-            SearchSupport: The created clone of this object. Be aware of the fact that
-                           the returned object is semantically equivalent to deep copy
-                           of this object. In other words, any modification of the clone will
-                           not change the status of this object and vice versa.
+            Returns:
+                SearchSupport: The created clone of this object. Be aware of the fact that
+                            the returned object is semantically equivalent to deep copy
+                            of this object. In other words, any modification of the clone will
+                            not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)

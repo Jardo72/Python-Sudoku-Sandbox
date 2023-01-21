@@ -18,7 +18,7 @@
 #
 
 from io import StringIO, TextIOWrapper
-from typing import List
+from typing import List, Optional
 
 from .invalid_input_error import InvalidInputError
 
@@ -43,7 +43,7 @@ class _PuzzleParser:
         if self._lines[index] != self._BORDER_LINE_TEMPLATE:
             raise InvalidInputError(f"Row {index + 1} is not a valid border line.")
 
-    def _parse_cell_line(self, row_index: int) -> List[int | None]:
+    def _parse_cell_line(self, row_index: int) -> List[Optional[int]]:
         result = []
         if row_index >= len(self._lines):
             raise InvalidInputError("Row {0} is missing.".format(row_index + 1))
@@ -57,14 +57,14 @@ class _PuzzleParser:
                 raise InvalidInputError("Row {0} is not a valid cell line.".format(row_index + 1))
         return result
 
-    def _parse_and_validate_cell_value(self, row_index: int, char_index: int) -> int | None:
+    def _parse_and_validate_cell_value(self, row_index: int, char_index: int) -> Optional[int]:
         if self._lines[row_index][char_index] not in " 123456789":
             raise InvalidInputError("Invalid cell value '{0}' found in row {1}.".format(self._lines[row_index][char_index], row_index + 1))
         if self._lines[row_index][char_index] == ' ':
             return None
         return int(self._lines[row_index][char_index])
 
-    def get_cells(self) -> List[List[int | None]]:
+    def get_cells(self) -> List[List[Optional[int]]]:
         result = []
         for index in range(13):
             if index in [1, 2, 3, 5, 6, 7, 9, 10, 11]:
@@ -75,7 +75,7 @@ class _PuzzleParser:
         return result
 
 
-def read_from_file(filename: str) -> List[List[int | None]]:
+def read_from_file(filename: str) -> List[List[Optional[int]]]:
     """
     Reads the input file with the given filename and parses the textual representation
     of the grid contained in it.
@@ -97,7 +97,7 @@ def read_from_file(filename: str) -> List[List[int | None]]:
         return parser.get_cells()
 
 
-def read_from_string(grid_as_string: str) -> List[List[int | None]]:
+def read_from_string(grid_as_string: str) -> List[List[Optional[int]]]:
     """
     Reads and parses the given textual representation of a grid.
 

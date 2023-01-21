@@ -19,7 +19,7 @@
 
 from collections import deque
 from logging import getLogger
-from typing import Deque
+from typing import Deque, Optional
 
 from sudoku.grid import CellAddress, Grid
 from sudoku.search.engine import AbstractSearchAlgorithm, SearchStepOutcome
@@ -77,7 +77,7 @@ class _SearchGraphNodeStack:
         self._entries.append(node)
         _logger.debug("Node pushed to stack: %s", node)
 
-    def backtrack_to_first_unexhausted_node(self) -> _SearchGraphNode | None:
+    def backtrack_to_first_unexhausted_node(self) -> Optional[_SearchGraphNode]:
         node = self._peek()
         while node is not None and node.already_exhausted:
             self._pop()
@@ -85,12 +85,12 @@ class _SearchGraphNodeStack:
         _logger.debug("Backtracked to node %s", node)
         return node
 
-    def _pop(self) -> _SearchGraphNode | None:
+    def _pop(self) -> Optional[_SearchGraphNode]:
         if len(self._entries) == 0:
             return None
         return self._entries.pop()
 
-    def _peek(self) -> _SearchGraphNode | None:
+    def _peek(self) -> Optional[_SearchGraphNode]:
         if len(self._entries) == 0:
             return None
         return self._entries[-1]

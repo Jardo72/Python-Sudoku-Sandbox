@@ -130,7 +130,7 @@ class CandidateValueExclusionLogic:
             rows.append(tuple([original._candidates[row][column].copy() for column in range(9)]))
         return tuple(rows)
 
-    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate] | None:
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
         """
         Applies the given cell value to the cell with the given coordinates and excludes
         the given cell value for the peers of the cell with the coordinates.
@@ -180,7 +180,7 @@ class CandidateValueExclusionLogic:
             return self._get_candidates_for_undefined_cell_with_least_candidates()
         raise ValueError(f"Unexpected candidate query mode {query_mode}")
 
-    def _get_candidates_for_first_undefined_cell(self) -> CandidateList | None:
+    def _get_candidates_for_first_undefined_cell(self) -> Optional[CandidateList]:
         for cell_address in get_all_cell_addresses():
             row, column = cell_address.row, cell_address.column
             if self._candidates[row][column].applicable_value_count > 0:
@@ -188,7 +188,7 @@ class CandidateValueExclusionLogic:
                 return CandidateList(cell_address, values)
         return None
 
-    def _get_candidates_for_undefined_cell_with_least_candidates(self) -> CandidateList | None:
+    def _get_candidates_for_undefined_cell_with_least_candidates(self) -> Optional[CandidateList]:
         candidate_list = None
         for cell_address in get_all_cell_addresses():
             row, column = cell_address.row, cell_address.column

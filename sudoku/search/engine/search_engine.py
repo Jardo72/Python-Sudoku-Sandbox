@@ -20,7 +20,7 @@
 from __future__ import annotations
 from logging import getLogger
 from time import perf_counter
-from typing import List
+from typing import List, Optional
 
 from sudoku.grid import Grid
 from .abstract_search_algorithm import AbstractSearchAlgorithm
@@ -125,7 +125,7 @@ class _SearchJob:
         return self._duration_millis
 
 
-def find_solution(puzzle_cell_values: List[List[int | None]], algorithm_name: str, timeout_sec: int) -> SearchSummary:
+def find_solution(puzzle_cell_values: List[List[Optional[int]]], algorithm_name: str, timeout_sec: int) -> SearchSummary:
     _logger.info("Going to start %s search (timeout = %d sec)", algorithm_name, timeout_sec)
     puzzle = Grid(puzzle_cell_values)
     if not puzzle.is_valid():
