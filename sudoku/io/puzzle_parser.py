@@ -46,20 +46,20 @@ class _PuzzleParser:
     def _parse_cell_line(self, row_index: int) -> List[Optional[int]]:
         result = []
         if row_index >= len(self._lines):
-            raise InvalidInputError("Row {0} is missing.".format(row_index + 1))
+            raise InvalidInputError(f"Row {row_index + 1} is missing.")
         if (len(self._lines[row_index])) != len(self._CELL_LINE_TEMPLATE):
-            raise InvalidInputError("Row {0} is not a valid cell line.".format(row_index + 1))
+            raise InvalidInputError(f"Row {row_index + 1} is not a valid cell line.")
         for char_index in range(0, len(self._CELL_LINE_TEMPLATE)):
             if self._CELL_LINE_TEMPLATE[char_index] == '?':
                 cell_value = self._parse_and_validate_cell_value(row_index, char_index)
                 result.append(cell_value)
             elif self._CELL_LINE_TEMPLATE[char_index] != self._lines[row_index][char_index]:
-                raise InvalidInputError("Row {0} is not a valid cell line.".format(row_index + 1))
+                raise InvalidInputError(f"Row {row_index + 1} is not a valid cell line.")
         return result
 
     def _parse_and_validate_cell_value(self, row_index: int, char_index: int) -> Optional[int]:
         if self._lines[row_index][char_index] not in " 123456789":
-            raise InvalidInputError("Invalid cell value '{0}' found in row {1}.".format(self._lines[row_index][char_index], row_index + 1))
+            raise InvalidInputError(f"Invalid cell value '{self._lines[row_index][char_index]}' found in row {row_index + 1}.")
         if self._lines[row_index][char_index] == ' ':
             return None
         return int(self._lines[row_index][char_index])
