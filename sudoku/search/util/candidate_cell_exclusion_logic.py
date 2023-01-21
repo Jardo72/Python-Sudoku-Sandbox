@@ -126,10 +126,8 @@ class _RegionCandidateCells:
         return result
 
     def get_single_remaining_applicable_cell(self) -> Optional[UnambiguousCandidate]:
-        # TODO: use assert
-        if self._applicable_cell_count != 1:
-            message = "Cannot provide single remaining applicable cell ({0} candidates remaining)."
-            raise RuntimeError(message.format(self._applicable_cell_count))
+        assert self._applicable_cell_count == 1, \
+            f"Cannot provide single remaining applicable cell ({self._applicable_cell_count} candidates remaining)."
         _logger.debug("Remaining bitmask = %s", format(self._bitmask, 'b'))
         for i in range(0, 9):
             mask = 1 << i

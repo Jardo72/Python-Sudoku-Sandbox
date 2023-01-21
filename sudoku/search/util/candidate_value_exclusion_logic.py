@@ -78,10 +78,8 @@ class _CandidateValues:
         return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
-        # TODO: use assert
-        if self._applicable_value_count != 1:
-            message = f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
-            raise RuntimeError(message)
+        assert self._applicable_value_count == 1, \
+            f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
         for value in range(1, 10):
             if self._bitmask == (1 << (value - 1)):
                 return value
