@@ -34,8 +34,8 @@ class _PuzzleParser:
 
     _CELL_LINE_TEMPLATE = "| ? ? ? | ? ? ? | ? ? ? |"
 
-    def __init__(self, input: StringIO | TextIOWrapper) -> None:
-        self._lines = [line.strip() for line in input.readlines()]
+    def __init__(self, io_input: StringIO | TextIOWrapper) -> None:
+        self._lines = [line.strip() for line in io_input.readlines()]
 
     def _parse_border_line(self, index: int) -> None:
         if index >= len(self._lines):
@@ -49,11 +49,11 @@ class _PuzzleParser:
             raise InvalidInputError(f"Row {row_index + 1} is missing.")
         if (len(self._lines[row_index])) != len(self._CELL_LINE_TEMPLATE):
             raise InvalidInputError(f"Row {row_index + 1} is not a valid cell line.")
-        for char_index in range(0, len(self._CELL_LINE_TEMPLATE)):
+        for char_index, char in enumerate(self._CELL_LINE_TEMPLATE):
             if self._CELL_LINE_TEMPLATE[char_index] == '?':
                 cell_value = self._parse_and_validate_cell_value(row_index, char_index)
                 result.append(cell_value)
-            elif self._CELL_LINE_TEMPLATE[char_index] != self._lines[row_index][char_index]:
+            elif char != self._lines[row_index][char_index]:
                 raise InvalidInputError(f"Row {row_index + 1} is not a valid cell line.")
         return result
 
@@ -113,6 +113,6 @@ def read_from_string(grid_as_string: str) -> List[List[Optional[int]]]:
         InvalidInputError   If the given input is invalid (e.g. crippled grid, invalid
                             cell values etc.).
     """
-    with StringIO(grid_as_string.strip()) as input:
-        parser = _PuzzleParser(input)
+    with StringIO(grid_as_string.strip()) as string_io:
+        parser = _PuzzleParser(string_io)
         return parser.get_cells()

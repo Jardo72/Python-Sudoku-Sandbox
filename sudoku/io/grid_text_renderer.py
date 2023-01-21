@@ -65,6 +65,10 @@ class _GridTextRenderer:
         self._output = StringIO()
 
     def render(self) -> str:
+        """
+        Creates and returns a string representation of the grid this rendered has been initialized
+        with.
+        """
         if self._use_colors:
             self._output.write("\n" + self._GRID_FOREGROUND + self._GRID_BACKGROUND)
         self._write_border()

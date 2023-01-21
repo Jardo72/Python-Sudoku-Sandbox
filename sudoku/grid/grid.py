@@ -43,11 +43,13 @@ class _Cell:
 
     @property
     def value(self) -> int:
+        """ The value of the cell represented by this object. """
         assert self._status != CellStatus.UNDEFINED, f"Cell with status {self._status} does not have value."
         return self._value   # type: ignore
 
     @property
     def status(self) -> CellStatus:
+        """ The status of the cell represented by this object. """
         return self._status
 
     def __repr__(self) -> str:
