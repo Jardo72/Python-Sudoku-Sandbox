@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-from abc import ABC
 from abc import abstractmethod
 from logging import getLogger
 

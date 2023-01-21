@@ -195,4 +195,3 @@ class SearchSupport:
                            not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)
-
