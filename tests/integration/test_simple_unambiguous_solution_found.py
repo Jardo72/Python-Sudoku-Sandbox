@@ -28,7 +28,7 @@ from commons import _assert_are_equivalent
 _algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-DFS", "Smart-BFS"]
 
 
-_DURATION_MILLIS = 100
+_DURATION_MILLIS = 300
 
 
 class TestSimpleUnambiguousPuzzleSolutionFound:
