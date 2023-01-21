@@ -150,7 +150,13 @@ The automated test suite is based on the [pytest](https://pypi.org/project/pytes
 The above listed combination of test levels is a pragmatic approach that allowed me to gain a solid degree of confidence with an affordable effort. In order to start the entire test suite (i.e. unit tests as well as integration tests), execute the following command in the root directory of the project:
 
 ```
-python -m pytest ./tests
+python -m pytest tests
+```
+
+The following command can be used to start the entire test suite so that **code coverage report** will be generated. This command assumes that the necessary test dependencies (see [test-requirements.txt](./test-requirements.txt)) have been installed.
+
+```
+python -m pytest --cov=sudoku --cov-branch --cov-report html --html=test-results.html tests
 ```
 
 ##### Unit Tests
@@ -160,7 +166,7 @@ As already mentioned before, the provided unit tests tend to exercise individual
 The unit tests reside in the [tests/unit](./tests/unit) directory. In order to start them (without the integration tests), execute the following command in the root directory of the project:
 
 ```
-python -m pytest ./tests/unit
+python -m pytest tests/unit
 ```
 
 The names of the unit test modules strictly follow a naming convention. In concrete terms, the name of a test module is always derived from the name of the tested functionality, and the test modules use the `test_` prefix. For instance, the name of the test module testing the functionality provided by the `sudoku.grid.grid.py` module is `test_grid.py`.
@@ -192,7 +198,7 @@ The list of functionalities not covered by the integration tests is rather short
 The integration tests reside in the [tests/integration](./tests/integration) directory. In order to start them (without the unit tests), execute the following command in the root directory of the project:
 
 ```
-python -m pytest ./tests/integration
+python -m pytest tests/integration
 ```
 
 
