@@ -44,7 +44,7 @@ class TestSearchSummaryHtmlRenderer:
             [3, _, _, _, _, _, _, _, 4],
         ]
         grid = Grid(initial_cell_values)
-        
+
         grid.set_cell_value(get_cell_address(0, 2), 4)
         grid.set_cell_value(get_cell_address(6, 7), 1)
         grid.set_cell_value(get_cell_address(3, 5), 2)
