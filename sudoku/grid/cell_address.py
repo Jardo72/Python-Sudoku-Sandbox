@@ -55,7 +55,7 @@ def get_cell_address(row: int, column: int) -> CellAddress:
         column (int):    The column coordinate of the cell whose cell address is to be
                          returned. The value zero corresponds to the first column, the
                          value eight corresponds to the last (ninth) column.
-    
+
     Returns:
         CellAddress:    The cell address representing the given coordinates.
     """

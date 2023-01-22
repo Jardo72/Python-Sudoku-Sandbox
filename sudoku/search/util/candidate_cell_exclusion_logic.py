@@ -162,8 +162,8 @@ class _RegionGrid:
         elif value is None and regions is not None:
             self._regions = regions
         else:
-            # TODO: invalid arguments
-            ...
+            message = "Invalid arguments. Exactly one of the two arguments is expected."
+            raise ValueError(message)
 
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
         result = None
