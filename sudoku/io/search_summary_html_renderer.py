@@ -42,11 +42,11 @@ def render_as_html(search_summary: SearchSummary) -> str:
     Returns:
         str: The generated HTML representation of the given search summary.
     """
-    renderer = _GridHtmlRenderer(search_summary)
+    renderer = _SearchSummaryHtmlRenderer(search_summary)
     return renderer.render()
 
 
-class _GridHtmlRenderer:
+class _SearchSummaryHtmlRenderer:
     """
     Simple renderer that can take an instance of the sudoku.search.SearchSummary class and
     generate its HTML representation. The generated representation also includes a grid

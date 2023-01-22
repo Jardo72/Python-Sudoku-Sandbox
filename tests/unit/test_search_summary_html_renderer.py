@@ -17,8 +17,25 @@
 # limitations under the License.
 #
 
+from bs4 import BeautifulSoup
+from pytest import mark
 
-from .search_summary_html_renderer import render_as_html  # noqa: F401
-from .grid_text_renderer import render_as_text  # noqa: F401
-from .invalid_input_error import InvalidInputError  # noqa: F401
-from .puzzle_parser import read_from_file, read_from_string  # noqa: F401
+from sudoku.io import render_as_html
+from sudoku.search.engine import SearchSummary
+
+
+class TestSearchSummaryHtmlRenderer:
+    """
+    Collection of unit tests exercising the sudoku.io.render_as_html function.
+    """
+
+    def _create_summary(self) -> SearchSummary:
+        pass
+
+    @mark.skip("Not implemented yet")
+    def test_that_summary_is_rednered_properly(self) -> None:
+        pass
+
+    @mark.skip("Not implemented yet")
+    def test_that_final_grid_is_rendered_properly(self) -> None:
+        pass
