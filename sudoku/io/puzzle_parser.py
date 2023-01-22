@@ -59,7 +59,9 @@ class _PuzzleParser:
 
     def _parse_and_validate_cell_value(self, row_index: int, char_index: int) -> Optional[int]:
         if self._lines[row_index][char_index] not in " 123456789":
-            raise InvalidInputError(f"Invalid cell value '{self._lines[row_index][char_index]}' found in row {row_index + 1}.")
+            raise InvalidInputError(
+                f"Invalid cell value '{self._lines[row_index][char_index]}' found in row {row_index + 1}."
+            )
         if self._lines[row_index][char_index] == ' ':
             return None
         return int(self._lines[row_index][char_index])

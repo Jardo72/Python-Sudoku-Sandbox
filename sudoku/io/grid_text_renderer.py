@@ -108,4 +108,5 @@ class _GridTextRenderer:
         self._output.write("\n")
 
     def _decorate_with_color(self, cell_value: str) -> str:
-        return self._GRID_BACKGROUND + self._PREDEFINED_CELL_FOREGROUND + cell_value + self._GRID_BACKGROUND + self._GRID_FOREGROUND
+        return self._GRID_BACKGROUND + self._PREDEFINED_CELL_FOREGROUND + \
+               cell_value + self._GRID_BACKGROUND + self._GRID_FOREGROUND

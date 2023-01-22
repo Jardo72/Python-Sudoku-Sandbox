@@ -119,7 +119,9 @@ def _create_region_validation_block(topmost_row: int, leftmost_column: int) -> _
 def _create_validation_blocks() -> Tuple[_ValidationBlock, ...]:
     rows = [_create_row_validation_block(row) for row in range(9)]
     columns = [_create_column_validation_block(column) for column in range(9)]
-    regions = [_create_region_validation_block(topmost_row, leftmost_column) for topmost_row in [0, 3, 6] for leftmost_column in [0, 3, 6]]
+    regions = [
+        _create_region_validation_block(top_row, left_column) for top_row in [0, 3, 6] for left_column in [0, 3, 6]
+    ]
     return tuple(rows + columns + regions)
 
 

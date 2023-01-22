@@ -41,7 +41,10 @@ class _RegionCandidateCells:
 
     _column_peers = {0: 0b110110110, 1: 0b101101101, 2: 0b011011011}
 
-    def __init__(self, topmost_row: int, leftmost_column: int, value: int, bitmask: int = 0b111111111, applicable_cell_count: int = 9) -> None:
+    def __init__(
+        self, topmost_row: int, leftmost_column: int, value: int, bitmask: int = 0b111111111,
+        applicable_cell_count: int = 9
+    ) -> None:
         self._topmost_row = topmost_row
         self._leftmost_column = leftmost_column
         self._value = value
