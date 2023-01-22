@@ -130,8 +130,8 @@ def find_solution(puzzle_cell_values: List[List[Optional[int]]], algorithm_name:
     puzzle = Grid(puzzle_cell_values)
     if not puzzle.is_valid():
         _logger.error("Puzzle not valid")
-        message = "The given puzzle violates the game rules. "
-        message += "At least one value is present two or more times in a single row, single column, or single region."
+        message = "The given puzzle violates the game rules. At least one value is present two or more " \
+                  "times in a single row, single column, or single region."
         raise InvalidPuzzleError(message)
     if puzzle.is_complete():
         _logger.error("Puzzle already complete")

@@ -93,6 +93,9 @@ class SearchSupport:
         """
         Creates and returns a clone of the underlying grid. Modification of the returned snapshot
         will not impact the internal state of this object.
+        
+        Returns:
+            Grid:   The created snapshot of the underlying grid.
         """
         return self._grid.copy()
 
@@ -106,15 +109,15 @@ class SearchSupport:
         retained so that they can be provided by the get_unambiguous_candidate
         method.
 
-            Parameters:
-                cell_address (CellAddress):    The coordinates of the cell whose value
-                                               is to be set.
-                value (int):                   The new value for the given cell.
+        Args:
+            cell_address (CellAddress):    The coordinates of the cell whose value
+                                           is to be set.
+            value (int):                   The new value for the given cell.
 
-            Raises:
-                ValueError      If the given cell has already a value, regardless
-                                of whether the value was defined in the original
-                                puzzle or completed during the search.
+        Raises:
+            ValueError      If the given cell has already a value, regardless
+                            of whether the value was defined in the original
+                            puzzle or completed during the search.
         """
         self._grid.set_cell_value(cell_address, value)
         candidate_list = self._value_exclusion_logic.apply_and_exclude_cell_value(cell_address, value)
@@ -142,10 +145,10 @@ class SearchSupport:
         which all nine values have been already excluded (i.e. no candidate value is
         applicable to the cell).
 
-            Returns:
-                bool: True if and only if the underlying grid contains at least one undefined cell
-                      for which all nine values have been already excluded. False if at least one
-                      candidate value is applicable to each undefined cell of underlying grid.
+        Returns:
+            bool: True if and only if the underlying grid contains at least one undefined cell
+                    for which all nine values have been already excluded. False if at least one
+                    candidate value is applicable to each undefined cell of underlying grid.
         """
         for cell_address in get_all_cell_addresses():
             cell_status = self._grid.get_cell_status(cell_address)
@@ -177,13 +180,13 @@ class SearchSupport:
         Returns candidate values applicable to one of the undefined cells of the
         underlying grid.
 
-            Parameters:
-                mode (CandidateQueryMode):    One of the elements of the CandidateQueryMode enum
-                                              determining which of the undefined cells of the underlying
-                                              grid is to be taken into account.
+        Args:
+            mode (CandidateQueryMode):    One of the elements of the CandidateQueryMode enum
+                                          determining which of the undefined cells of the underlying
+                                          grid is to be taken into account.
 
-            Returns:
-                CandidateList:
+        Returns:
+            CandidateList:
         """
         result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:
@@ -198,10 +201,10 @@ class SearchSupport:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-            Returns:
-                SearchSupport: The created clone of this object. Be aware of the fact that
-                            the returned object is semantically equivalent to deep copy
-                            of this object. In other words, any modification of the clone will
-                            not change the status of this object and vice versa.
+        Returns:
+            SearchSupport: The created clone of this object. Be aware of the fact that
+                        the returned object is semantically equivalent to deep copy
+                        of this object. In other words, any modification of the clone will
+                        not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)

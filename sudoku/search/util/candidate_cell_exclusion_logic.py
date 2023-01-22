@@ -205,16 +205,16 @@ class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
         Applies the given cell value to the cell with the given coordinates and excludes
         all peers of the given cell as candidate cells for the given value.
 
-            Parameters:
-                cell_address (CellAddress):     The coordinates of the cell the given value is to
-                                                be applied to.
-                value (int):                    The value for the given cell.
+        Args:
+            cell_address (CellAddress):     The coordinates of the cell the given value is to
+                                            be applied to.
+            value (int):                    The value for the given cell.
 
-            Returns:
-                List of UnambiguousCandidate instances, one for each of those cells which have
-                been identified as unambiguous candidate cells with any region for any value.
-                None is returned if the exclusion has not led to any cell being identified as
-                unambiguous candidate cell.
+        Returns:
+            List of UnambiguousCandidate instances, one for each of those cells which have
+            been identified as unambiguous candidate cells with any region for any value.
+            None is returned if the exclusion has not led to any cell being identified as
+            unambiguous candidate cell.
         """
         _logger.debug("Going to apply & exclude the value %d for the cell %s", value, cell_address)
         result = None
@@ -230,10 +230,10 @@ class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-            Returns:
-                CandidateCellExclusionLogic: The created clone of this object. Be aware of the fact that
-                                             the returned object is semantically equivalent to deep copy
-                                             of this object. In other words, any modification of the clone will
-                                             not change the status of this object and vice versa.
+        Returns:
+            CandidateCellExclusionLogic: The created clone of this object. Be aware of the fact that
+                                            the returned object is semantically equivalent to deep copy
+                                            of this object. In other words, any modification of the clone will
+                                            not change the status of this object and vice versa.
         """
         return CandidateCellExclusionLogic(self)

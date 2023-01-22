@@ -133,15 +133,15 @@ class CandidateValueExclusionLogic:
         Applies the given cell value to the cell with the given coordinates and excludes
         the given cell value for the peers of the cell with the coordinates.
 
-            Parameters:
-                cell_address (CellAddress):    The coordinates of the cell the given value is to
-                                            be applied to.
-                value (int):                   The value for the given cell.
+        Args:
+            cell_address (CellAddress):    The coordinates of the cell the given value is to
+                                        be applied to.
+            value (int):                   The value for the given cell.
 
-            Returns:
-                List of UnambiguousCandidate instances, one for each of those peers of the concerned
-                cell for which just a single applicable candidate value has remained after the
-                exclusion. None is returned if there is no such peer.
+        Returns:
+            List of UnambiguousCandidate instances, one for each of those peers of the concerned
+            cell for which just a single applicable candidate value has remained after the
+            exclusion. None is returned if there is no such peer.
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to apply candidate value %d to cell [%d, %d]", value, row, column)
@@ -162,15 +162,15 @@ class CandidateValueExclusionLogic:
         """
         Returns a list of candidate values applicable to one of the undefined cells.
 
-            Parameters:
-                query_mode (CandidateQueryMode):    Determines the undefined cell for which the candidate
-                                                    values are to be provided.
-            Returns:
-                CandidaleList: New CandidateList instance carrying the applicable candidate values as well
-                               as the address of the undefined cell the candidate values are applicable to.
+        Args:
+            query_mode (CandidateQueryMode):    Determines the undefined cell for which the candidate
+                                                values are to be provided.
+        Returns:
+            CandidaleList: New CandidateList instance carrying the applicable candidate values as well
+                            as the address of the undefined cell the candidate values are applicable to.
 
-            Raises:
-                ValueError:   If unexpected query mode is received.
+        Raises:
+            ValueError:   If unexpected query mode is received.
         """
         if query_mode is CandidateQueryMode.FIRST_UNDEFINED_CELL:
             return self._get_candidates_for_first_undefined_cell()
@@ -201,15 +201,15 @@ class CandidateValueExclusionLogic:
         """
         Verifies whether the given unambiguous candidate is applicable.
 
-            Parameters:
-                unambiguous_candidate (UnambiguousCandidate): The unambiguous candidate to be verified.
+        Args:
+            unambiguous_candidate (UnambiguousCandidate): The unambiguous candidate to be verified.
 
-            Returns:
-                bool: True if and only of the candidate value carried by the given candidate
-                    object is applicable to the cell with the coordinates carried by the
-                    given candidate object. False if the concerned cell is not empty, or if
-                    the concerned cell value is already present in the row, column, or region
-                    containing the concerned cell.
+        Returns:
+            bool: True if and only of the candidate value carried by the given candidate
+                object is applicable to the cell with the coordinates carried by the
+                given candidate object. False if the concerned cell is not empty, or if
+                the concerned cell value is already present in the row, column, or region
+                containing the concerned cell.
         """
         cell_address = unambiguous_candidate.cell_address
         value = unambiguous_candidate.value
@@ -220,13 +220,13 @@ class CandidateValueExclusionLogic:
         Returns the number of candidate values applicable to the cell with the given
         coordinates.
 
-            Parameters:
-                cell_address (CellAddress):    The coordinates of the cell for which the number of
-                                            applicable candidate values is to be returned.
+        Args:
+            cell_address (CellAddress):    The coordinates of the cell for which the number of
+                                        applicable candidate values is to be returned.
 
-            Returns:
-                int:    The number of candidate values which are still applicable (i.e. have not
-                        been excluded yet) to the cell with the given coordinates.
+        Returns:
+            int:    The number of candidate values which are still applicable (i.e. have not
+                    been excluded yet) to the cell with the given coordinates.
         """
         return self._candidates[cell_address.row][cell_address.column].applicable_value_count
 
@@ -235,10 +235,10 @@ class CandidateValueExclusionLogic:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-            Returns:
-                CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
-                                              the returned object is semantically equivalent to deep copy
-                                              of this object. In other words, any modification of the clone will
-                                              not change the status of this object and vice versa.
+        Returns:
+            CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
+                                            the returned object is semantically equivalent to deep copy
+                                            of this object. In other words, any modification of the clone will
+                                            not change the status of this object and vice versa.
         """
         return CandidateValueExclusionLogic(self)
