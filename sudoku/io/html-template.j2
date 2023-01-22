@@ -95,7 +95,9 @@ td.predefinedCell {
 {% for row_within_region in [0, 1, 2] %}
 <tr>
 {% for column_within_region in [0, 1, 2] %}
-<td class='{{ styles[region_row * 3 + row_within_region][region_column * 3 + column_within_region]}}'>{{ values[region_row * 3 + row_within_region][region_column * 3 + column_within_region] }}</td>
+<td id='{{ ids[region_row * 3 + row_within_region][region_column * 3 + column_within_region] }}' class='{{ styles[region_row * 3 + row_within_region][region_column * 3 + column_within_region]}}'>
+{{ values[region_row * 3 + row_within_region][region_column * 3 + column_within_region] }}
+</td>
 {% endfor %}
 </tr>
 {% endfor %}
