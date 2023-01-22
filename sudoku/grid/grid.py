@@ -43,11 +43,13 @@ class _Cell:
 
     @property
     def value(self) -> int:
+        """ The value of the cell represented by this object. """
         assert self._status != CellStatus.UNDEFINED, f"Cell with status {self._status} does not have value."
         return self._value   # type: ignore
 
     @property
     def status(self) -> CellStatus:
+        """ The status of the cell represented by this object. """
         return self._status
 
     def __repr__(self) -> str:
@@ -117,7 +119,9 @@ def _create_region_validation_block(topmost_row: int, leftmost_column: int) -> _
 def _create_validation_blocks() -> Tuple[_ValidationBlock, ...]:
     rows = [_create_row_validation_block(row) for row in range(9)]
     columns = [_create_column_validation_block(column) for column in range(9)]
-    regions = [_create_region_validation_block(topmost_row, leftmost_column) for topmost_row in [0, 3, 6] for leftmost_column in [0, 3, 6]]
+    regions = [
+        _create_region_validation_block(top_row, left_column) for top_row in [0, 3, 6] for left_column in [0, 3, 6]
+    ]
     return tuple(rows + columns + regions)
 
 
@@ -139,7 +143,7 @@ class Grid:
     cell objects.
     """
 
-    __validation_blocks = _create_validation_blocks()
+    _validation_blocks = _create_validation_blocks()
 
     def __init__(self, cell_values: Optional[CellValues] = None, original: Optional[Grid] = None) -> None:
         if Grid._is_ordinary_constructor(cell_values, original):
@@ -188,7 +192,7 @@ class Grid:
         """
         Returns the value of the cell with the given coordinates.
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The cell address of the cell whose value is to be returned.
 
         Returns:
@@ -203,7 +207,7 @@ class Grid:
         """
         Returns the status of the cell with the given coordinates.
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The cell address of the cell whose status is to be returned.
 
         Returns:
@@ -221,10 +225,8 @@ class Grid:
                   of this grid contains a duplicate value; False if this grid contains at least one row,
                   column, or region containing at least one duplicate value.
         """
-        for single_validation_block in self.__validation_blocks:
+        for single_validation_block in self._validation_blocks:
             if not self._is_valid(single_validation_block):
-                # TODO:
-                # we should log which validation block is not valid
                 return False
         return True
 
@@ -236,6 +238,7 @@ class Grid:
                 continue
             cell_value = self.get_cell_value(cell_address)
             if cell_value in used_cell_values:
+                _logger.error("%d used twice in validation block %s", cell_value, validation_block)
                 return False
             used_cell_values.add(cell_value)
         return True
@@ -258,9 +261,13 @@ class Grid:
         Sets the cell with the given coordinates to the given value, assumed the
         cell with the given coordinates is empty (i.e. its value is undefined).
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The coordinates of the cell whose value is to be set.
             value (int):                The new value for the given cell.
+
+        Raises:
+            ValueError: If the cell with the given coordinates is not empty (i.e. if it already
+                        has a value).
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to set the value of cell [%d, %d] to %d", row, column, value)

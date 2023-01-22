@@ -41,7 +41,10 @@ class _RegionCandidateCells:
 
     _column_peers = {0: 0b110110110, 1: 0b101101101, 2: 0b011011011}
 
-    def __init__(self, topmost_row: int, leftmost_column: int, value: int, bitmask: int = 0b111111111, applicable_cell_count: int = 9) -> None:
+    def __init__(
+        self, topmost_row: int, leftmost_column: int, value: int, bitmask: int = 0b111111111,
+        applicable_cell_count: int = 9
+    ) -> None:
         self._topmost_row = topmost_row
         self._leftmost_column = leftmost_column
         self._value = value
@@ -126,10 +129,8 @@ class _RegionCandidateCells:
         return result
 
     def get_single_remaining_applicable_cell(self) -> Optional[UnambiguousCandidate]:
-        # TODO: use assert
-        if self._applicable_cell_count != 1:
-            message = "Cannot provide single remaining applicable cell ({0} candidates remaining)."
-            raise RuntimeError(message.format(self._applicable_cell_count))
+        assert self._applicable_cell_count == 1, \
+            f"Cannot provide single remaining applicable cell ({self._applicable_cell_count} candidates remaining)."
         _logger.debug("Remaining bitmask = %s", format(self._bitmask, 'b'))
         for i in range(0, 9):
             mask = 1 << i
@@ -161,8 +162,8 @@ class _RegionGrid:
         elif value is None and regions is not None:
             self._regions = regions
         else:
-            # TODO: invalid arguments
-            ...
+            message = "Invalid arguments. Exactly one of the two arguments is expected."
+            raise ValueError(message)
 
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
         result = None
@@ -204,16 +205,16 @@ class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
         Applies the given cell value to the cell with the given coordinates and excludes
         all peers of the given cell as candidate cells for the given value.
 
-            Parameters:
-                cell_address (CellAddress):     The coordinates of the cell the given value is to
-                                                be applied to.
-                value (int):                    The value for the given cell.
+        Args:
+            cell_address (CellAddress):     The coordinates of the cell the given value is to
+                                            be applied to.
+            value (int):                    The value for the given cell.
 
-            Returns:
-                List of UnambiguousCandidate instances, one for each of those cells which have
-                been identified as unambiguous candidate cells with any region for any value.
-                None is returned if the exclusion has not led to any cell being identified as
-                unambiguous candidate cell.
+        Returns:
+            List of UnambiguousCandidate instances, one for each of those cells which have
+            been identified as unambiguous candidate cells with any region for any value.
+            None is returned if the exclusion has not led to any cell being identified as
+            unambiguous candidate cell.
         """
         _logger.debug("Going to apply & exclude the value %d for the cell %s", value, cell_address)
         result = None
@@ -229,10 +230,10 @@ class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-            Returns:
-                CandidateCellExclusionLogic: The created clone of this object. Be aware of the fact that
-                                             the returned object is semantically equivalent to deep copy
-                                             of this object. In other words, any modification of the clone will
-                                             not change the status of this object and vice versa.
+        Returns:
+            CandidateCellExclusionLogic: The created clone of this object. Be aware of the fact that
+                                            the returned object is semantically equivalent to deep copy
+                                            of this object. In other words, any modification of the clone will
+                                            not change the status of this object and vice versa.
         """
         return CandidateCellExclusionLogic(self)

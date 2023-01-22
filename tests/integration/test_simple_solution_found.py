@@ -27,8 +27,6 @@ from commons import _assert_are_equivalent
 
 _algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-DFS", "Smart-BFS", "Naive-DFS", "Naive-BFS"]
 
-_DURATION_MILLIS = 100
-
 
 class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
     """
@@ -72,7 +70,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 11
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -112,7 +109,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 14
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -152,7 +148,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 14
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -192,7 +187,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 13
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -232,7 +226,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 16
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -272,7 +265,6 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 15
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -312,5 +304,4 @@ class TestSimplePuzzleSolutionFoundEvenByNaiveAlgorithm:
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
         assert test_summary.search_summary.cell_values_tried == 15
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)

@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-from typing import Sequence, Tuple
+from typing import Optional, Sequence, Tuple
 
 from pytest import mark, raises
 
@@ -519,7 +519,7 @@ class TestCloning:
             assert clone.get_cell_value(cell_address) is None
 
     @property
-    def _initial_cell_values(self) -> Sequence[Sequence[int | None]]:
+    def _initial_cell_values(self) -> Sequence[Sequence[Optional[int]]]:
         return [
             [4, 1, _, _, _, _, _, _, _],
             [7, _, _, _, _, _, _, _, _],

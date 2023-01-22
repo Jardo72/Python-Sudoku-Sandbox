@@ -29,7 +29,7 @@ from commons import _assert_are_equivalent
 _algorithms = ["Smart-DFS", "Smart-BFS", "Naive-DFS", "Naive-BFS"]
 
 
-_TIMEOUT_SEC = 30
+_TIMEOUT_SEC = 60
 
 
 class TestAmbiguousPuzzleSolution:

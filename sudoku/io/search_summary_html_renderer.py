@@ -29,27 +29,28 @@ from sudoku.search.engine import SearchSummary
 def _load_template() -> str:
     template_resource = files("sudoku.io").joinpath("html-template.j2")
     with as_file(template_resource) as template_file:
-        return template_file.read_text()
+        return template_file.read_text(encoding="UTF-8")
 
 
 def render_as_html(search_summary: SearchSummary) -> str:
     """
-    Generates and returns HTML representation of the given grid.
+    Generates and returns HTML representation of the given search summary.
 
-    Paramaters:
-            grid (sudoku.grid.Grid):    The grid to be rendered.
+    Args:
+        search_summary (sudoku.search.SearchSummary):    The search summary to be rendered.
 
     Returns:
-        str: The generated HTML representation of the given grid.
+        str: The generated HTML representation of the given search summary.
     """
-    renderer = _GridHtmlRenderer(search_summary)
+    renderer = _SearchSummaryHtmlRenderer(search_summary)
     return renderer.render()
 
 
-class _GridHtmlRenderer:
+class _SearchSummaryHtmlRenderer:
     """
-    Simple renderer that can take an instance of the sudoku.grid.Grid class and
-    generate an HTML grid presenting the cell values of the given grid.
+    Simple renderer that can take an instance of the sudoku.search.SearchSummary class and
+    generate its HTML representation. The generated representation also includes a grid
+    presenting the cell values of the final grid contained in the search summary.
     """
 
     def __init__(self, search_summary: SearchSummary) -> None:
@@ -57,14 +58,24 @@ class _GridHtmlRenderer:
         self._environment = Environment(loader=BaseLoader())
 
     def render(self) -> str:
+        """
+        Generates and returns HTML representation of the search summary this object has been
+        initialized with.
+
+        Returns:
+            str: The generated HTML representation of the search summary this renderer has been
+                 initialized with.
+        """
         values = [["" for column in range(9)] for row in range(9)]
         styles = [["" for column in range(9)] for row in range(9)]
+        ids = [["" for column in range(9)] for row in range(9)]
         grid = self._search_summary.final_grid
         for row in range(9):
             for column in range(9):
                 cell_address = get_cell_address(row, column)
                 cell_status = grid.get_cell_status(cell_address)
                 styles[row][column] = "cell"
+                ids[row][column] = f"cell-{row}-{column}"
                 if cell_status == CellStatus.COMPLETED:
                     values[row][column] = str(grid.get_cell_value(cell_address))
                 elif cell_status == CellStatus.PREDEFINED:
@@ -78,6 +89,7 @@ class _GridHtmlRenderer:
             summary=self._search_summary,
             values=values,
             styles=styles,
+            ids=ids,
             trim_blocks=True,
             lstrip_blocks=True
         )

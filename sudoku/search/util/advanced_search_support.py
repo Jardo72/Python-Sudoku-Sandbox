@@ -27,6 +27,10 @@ from .search_support import SearchSupport
 
 
 class AdvancedSearchSupport(SearchSupport):
+    """
+    Enhanced vestion of helper class supporting implementation of search algorithms which
+    incorporates candidate cell exclusion logic into the search.
+    """
 
     def __init__(self, grid: Optional[Grid] = None, original: Optional[AdvancedSearchSupport] = None) -> None:
         super().__init__(grid, original)

@@ -23,4 +23,3 @@ class InvalidInputError(Exception):
     Raised to inidicate that the function read_from_file or read_from_string has encountered
     an invalid input.
     """
-    pass

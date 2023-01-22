@@ -78,10 +78,8 @@ class _CandidateValues:
         return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
-        # TODO: use assert
-        if self._applicable_value_count != 1:
-            message = f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
-            raise RuntimeError(message)
+        assert self._applicable_value_count == 1, \
+            f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
         for value in range(1, 10):
             if self._bitmask == (1 << (value - 1)):
                 return value
@@ -130,20 +128,20 @@ class CandidateValueExclusionLogic:
             rows.append(tuple([original._candidates[row][column].copy() for column in range(9)]))
         return tuple(rows)
 
-    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate] | None:
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
         """
         Applies the given cell value to the cell with the given coordinates and excludes
         the given cell value for the peers of the cell with the coordinates.
 
-            Parameters:
-                cell_address (CellAddress):    The coordinates of the cell the given value is to
-                                            be applied to.
-                value (int):                   The value for the given cell.
+        Args:
+            cell_address (CellAddress):    The coordinates of the cell the given value is to
+                                        be applied to.
+            value (int):                   The value for the given cell.
 
-            Returns:
-                List of UnambiguousCandidate instances, one for each of those peers of the concerned
-                cell for which just a single applicable candidate value has remained after the
-                exclusion. None is returned if there is no such peer.
+        Returns:
+            List of UnambiguousCandidate instances, one for each of those peers of the concerned
+            cell for which just a single applicable candidate value has remained after the
+            exclusion. None is returned if there is no such peer.
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to apply candidate value %d to cell [%d, %d]", value, row, column)
@@ -164,15 +162,15 @@ class CandidateValueExclusionLogic:
         """
         Returns a list of candidate values applicable to one of the undefined cells.
 
-            Parameters:
-                query_mode (CandidateQueryMode):    Determines the undefined cell for which the candidate
-                                                    values are to be provided.
-            Returns:
-                CandidaleList: New CandidateList instance carrying the applicable candidate values as well
-                               as the address of the undefined cell the candidate values are applicable to.
+        Args:
+            query_mode (CandidateQueryMode):    Determines the undefined cell for which the candidate
+                                                values are to be provided.
+        Returns:
+            CandidaleList: New CandidateList instance carrying the applicable candidate values as well
+                            as the address of the undefined cell the candidate values are applicable to.
 
-            Raises:
-                ValueError:   If unexpected query mode is received.
+        Raises:
+            ValueError:   If unexpected query mode is received.
         """
         if query_mode is CandidateQueryMode.FIRST_UNDEFINED_CELL:
             return self._get_candidates_for_first_undefined_cell()
@@ -180,7 +178,7 @@ class CandidateValueExclusionLogic:
             return self._get_candidates_for_undefined_cell_with_least_candidates()
         raise ValueError(f"Unexpected candidate query mode {query_mode}")
 
-    def _get_candidates_for_first_undefined_cell(self) -> CandidateList | None:
+    def _get_candidates_for_first_undefined_cell(self) -> Optional[CandidateList]:
         for cell_address in get_all_cell_addresses():
             row, column = cell_address.row, cell_address.column
             if self._candidates[row][column].applicable_value_count > 0:
@@ -188,7 +186,7 @@ class CandidateValueExclusionLogic:
                 return CandidateList(cell_address, values)
         return None
 
-    def _get_candidates_for_undefined_cell_with_least_candidates(self) -> CandidateList | None:
+    def _get_candidates_for_undefined_cell_with_least_candidates(self) -> Optional[CandidateList]:
         candidate_list = None
         for cell_address in get_all_cell_addresses():
             row, column = cell_address.row, cell_address.column
@@ -203,15 +201,15 @@ class CandidateValueExclusionLogic:
         """
         Verifies whether the given unambiguous candidate is applicable.
 
-            Parameters:
-                unambiguous_candidate (UnambiguousCandidate): The unambiguous candidate to be verified.
+        Args:
+            unambiguous_candidate (UnambiguousCandidate): The unambiguous candidate to be verified.
 
-            Returns:
-                bool: True if and only of the candidate value carried by the given candidate
-                    object is applicable to the cell with the coordinates carried by the
-                    given candidate object. False if the concerned cell is not empty, or if
-                    the concerned cell value is already present in the row, column, or region
-                    containing the concerned cell.
+        Returns:
+            bool: True if and only of the candidate value carried by the given candidate
+                object is applicable to the cell with the coordinates carried by the
+                given candidate object. False if the concerned cell is not empty, or if
+                the concerned cell value is already present in the row, column, or region
+                containing the concerned cell.
         """
         cell_address = unambiguous_candidate.cell_address
         value = unambiguous_candidate.value
@@ -222,13 +220,13 @@ class CandidateValueExclusionLogic:
         Returns the number of candidate values applicable to the cell with the given
         coordinates.
 
-            Parameters:
-                cell_address (CellAddress):    The coordinates of the cell for which the number of
-                                            applicable candidate values is to be returned.
+        Args:
+            cell_address (CellAddress):    The coordinates of the cell for which the number of
+                                        applicable candidate values is to be returned.
 
-            Returns:
-                int:    The number of candidate values which are still applicable (i.e. have not
-                        been excluded yet) to the cell with the given coordinates.
+        Returns:
+            int:    The number of candidate values which are still applicable (i.e. have not
+                    been excluded yet) to the cell with the given coordinates.
         """
         return self._candidates[cell_address.row][cell_address.column].applicable_value_count
 
@@ -237,10 +235,10 @@ class CandidateValueExclusionLogic:
         Creates and returns a copy of this object which behaves as if it was a deep copy
         of this object.
 
-            Returns:
-                CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
-                                              the returned object is semantically equivalent to deep copy
-                                              of this object. In other words, any modification of the clone will
-                                              not change the status of this object and vice versa.
+        Returns:
+            CandidateValueExclusionLogic: The created clone of this object. Be aware of the fact that
+                                            the returned object is semantically equivalent to deep copy
+                                            of this object. In other words, any modification of the clone will
+                                            not change the status of this object and vice versa.
         """
         return CandidateValueExclusionLogic(self)
