@@ -75,7 +75,7 @@ class _SearchSummaryHtmlRenderer:
                 cell_address = get_cell_address(row, column)
                 cell_status = grid.get_cell_status(cell_address)
                 styles[row][column] = "cell"
-                ids[row][column] = f"{row}-{column}"
+                ids[row][column] = f"cell-{row}-{column}"
                 if cell_status == CellStatus.COMPLETED:
                     values[row][column] = str(grid.get_cell_value(cell_address))
                 elif cell_status == CellStatus.PREDEFINED:
