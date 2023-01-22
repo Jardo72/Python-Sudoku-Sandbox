@@ -141,7 +141,7 @@ class Grid:
     cell objects.
     """
 
-    __validation_blocks = _create_validation_blocks()
+    _validation_blocks = _create_validation_blocks()
 
     def __init__(self, cell_values: Optional[CellValues] = None, original: Optional[Grid] = None) -> None:
         if Grid._is_ordinary_constructor(cell_values, original):
@@ -190,7 +190,7 @@ class Grid:
         """
         Returns the value of the cell with the given coordinates.
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The cell address of the cell whose value is to be returned.
 
         Returns:
@@ -205,7 +205,7 @@ class Grid:
         """
         Returns the status of the cell with the given coordinates.
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The cell address of the cell whose status is to be returned.
 
         Returns:
@@ -223,7 +223,7 @@ class Grid:
                   of this grid contains a duplicate value; False if this grid contains at least one row,
                   column, or region containing at least one duplicate value.
         """
-        for single_validation_block in self.__validation_blocks:
+        for single_validation_block in self._validation_blocks:
             if not self._is_valid(single_validation_block):
                 # TODO:
                 # we should log which validation block is not valid
@@ -260,9 +260,13 @@ class Grid:
         Sets the cell with the given coordinates to the given value, assumed the
         cell with the given coordinates is empty (i.e. its value is undefined).
 
-        Parameters:
+        Args:
             cell_address (CellAddress): The coordinates of the cell whose value is to be set.
             value (int):                The new value for the given cell.
+
+        Raises:
+            ValueError: If the cell with the given coordinates is not empty (i.e. if it already
+                        has a value).
         """
         row, column = cell_address.row, cell_address.column
         _logger.debug("Going to set the value of cell [%d, %d] to %d", row, column, value)

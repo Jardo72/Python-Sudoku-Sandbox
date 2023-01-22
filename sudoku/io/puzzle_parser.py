@@ -65,6 +65,19 @@ class _PuzzleParser:
         return int(self._lines[row_index][char_index])
 
     def get_cells(self) -> List[List[Optional[int]]]:
+        """
+        Reads the input this parser has been initialized with and parser the textual representation
+        of the grid contained in it.
+
+        Returns:
+            List of lists, where a single value in such a nested list corresponds to a single cell
+            from the parsed grid. The None value is used for undefined cells, int values between
+            1 and 9 are used for defined cells.
+
+        Raises:
+            InvalidInputError   If the given input is invalid (e.g. crippled grid, invalid
+                                cell values etc.).
+        """
         result = []
         for index in range(13):
             if index in [1, 2, 3, 5, 6, 7, 9, 10, 11]:
@@ -80,19 +93,19 @@ def read_from_file(filename: str) -> List[List[Optional[int]]]:
     Reads the input file with the given filename and parses the textual representation
     of the grid contained in it.
 
-    Parameters:
+    Args:
         filename (str):    The name of the input file to be read and parsed.
 
-    Returns:         List of lists, where a single value in such a nested list
-                        corresponds to a single cell from the parsed grid. The None value
-                        is used for undefined cells, int values between 1 and 9 are used
-                        for defined cells.
+    Returns:
+        List of lists, where a single value in such a nested list corresponds to a single cell
+        from the parsed grid. The None value is used for undefined cells, int values between 1
+        and 9 are used for defined cells.
 
     Raises:
         InvalidInputError   If the given input is invalid (e.g. crippled grid, invalid
                             cell values etc.).
     """
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="UTF-8") as file:
         parser = _PuzzleParser(file)
         return parser.get_cells()
 
@@ -101,13 +114,13 @@ def read_from_string(grid_as_string: str) -> List[List[Optional[int]]]:
     """
     Reads and parses the given textual representation of a grid.
 
-    Parameters:
+    Args:
         grid_as_string (str):    The textual representation of puzzle to be parsed.
 
-    Returns:         List of lists, where a single value in such a nested list
-                        corresponds to a single cell from the parsed grid. The None value
-                        is used for undefined cells, int values between 1 and 9 are used
-                        for defined cells.
+    Returns:
+        List of lists, where a single value in such a nested list corresponds to a single cell
+        from the parsed grid. The None value is used for undefined cells, int values between 1
+        and 9 are used for defined cells.
 
     Raises:
         InvalidInputError   If the given input is invalid (e.g. crippled grid, invalid
