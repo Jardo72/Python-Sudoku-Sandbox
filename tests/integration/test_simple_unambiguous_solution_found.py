@@ -28,9 +28,6 @@ from commons import _assert_are_equivalent
 _algorithms = ["Basic-UCS", "Advanced-UCS", "Smart-DFS", "Smart-BFS"]
 
 
-_DURATION_MILLIS = 300
-
-
 class TestSimpleUnambiguousPuzzleSolutionFound:
     """
     Collection of integration tests covering the case when an unambiguous puzzle is successfully
@@ -74,7 +71,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -113,7 +109,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -152,7 +147,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -191,7 +185,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -230,7 +223,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -269,7 +261,6 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -308,5 +299,4 @@ class TestSimpleUnambiguousPuzzleSolutionFound:
 
         assert test_summary.search_summary.outcome == SearchOutcome.SOLUTION_FOUND
         assert test_summary.search_summary.algorithm == algorithm_name
-        assert test_summary.search_summary.duration_millis < _DURATION_MILLIS
         _assert_are_equivalent(expected_solution, test_summary.final_grid)

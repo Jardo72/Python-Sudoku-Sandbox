@@ -55,6 +55,7 @@ class TestAmbiguousPuzzlesLeadingToTimeout:
         test_summary = TestSearchEngine.find_solution(puzzle, algorithm_name, timeout_sec=_TIMEOUT_SEC)
 
         assert test_summary.search_summary.outcome == SearchOutcome.TIMEOUT
+        assert test_summary.search_summary.duration_millis >= _TIMEOUT_SEC * 1000
         assert test_summary.search_summary.algorithm == algorithm_name
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -77,6 +78,7 @@ class TestAmbiguousPuzzlesLeadingToTimeout:
         test_summary = TestSearchEngine.find_solution(puzzle, algorithm_name, timeout_sec=_TIMEOUT_SEC)
 
         assert test_summary.search_summary.outcome == SearchOutcome.TIMEOUT
+        assert test_summary.search_summary.duration_millis >= _TIMEOUT_SEC * 1000
         assert test_summary.search_summary.algorithm == algorithm_name
 
     @mark.parametrize("algorithm_name", _algorithms)
@@ -99,4 +101,5 @@ class TestAmbiguousPuzzlesLeadingToTimeout:
         test_summary = TestSearchEngine.find_solution(puzzle, algorithm_name, timeout_sec=_TIMEOUT_SEC)
 
         assert test_summary.search_summary.outcome == SearchOutcome.TIMEOUT
+        assert test_summary.search_summary.duration_millis >= _TIMEOUT_SEC * 1000
         assert test_summary.search_summary.algorithm == algorithm_name
