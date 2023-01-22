@@ -227,8 +227,6 @@ class Grid:
         """
         for single_validation_block in self._validation_blocks:
             if not self._is_valid(single_validation_block):
-                # TODO:
-                # we should log which validation block is not valid
                 return False
         return True
 
@@ -240,6 +238,7 @@ class Grid:
                 continue
             cell_value = self.get_cell_value(cell_address)
             if cell_value in used_cell_values:
+                _logger.error("%d used twice in validation block %s", cell_value, validation_block)
                 return False
             used_cell_values.add(cell_value)
         return True

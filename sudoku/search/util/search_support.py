@@ -93,7 +93,7 @@ class SearchSupport:
         """
         Creates and returns a clone of the underlying grid. Modification of the returned snapshot
         will not impact the internal state of this object.
-        
+
         Returns:
             Grid:   The created snapshot of the underlying grid.
         """
