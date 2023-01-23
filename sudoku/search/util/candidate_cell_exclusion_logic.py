@@ -58,7 +58,8 @@ class _RegionCandidateCells:
         if (row_within_region, column_within_region) == (-1, -1):
             # cell not contained in this region, and neither the row, nor the column
             # containing the cell is crossing this region => nothing to be excluded
-            _logger.debug("Ignoring region starting at [%d, %d] for the value %d", self._topmost_row, self._leftmost_column, self._value)
+            _logger.debug("Ignoring region starting at [%d, %d] for the value %d", self._topmost_row,
+                self._leftmost_column, self._value)
             return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
         if row_within_region in [0, 1, 2] and column_within_region not in [0, 1, 2]:
@@ -147,7 +148,13 @@ class _RegionCandidateCells:
         """
         Creates and returns a deep copy of this object.
         """
-        return _RegionCandidateCells(self._topmost_row, self._leftmost_column, self._value, self._bitmask, self._applicable_cell_count)
+        return _RegionCandidateCells(
+            topmost_row=self._topmost_row,
+            leftmost_column=self._leftmost_column,
+            value=self._value,
+            bitmask=self._bitmask,
+            applicable_cell_count=self._applicable_cell_count
+        )
 
 
 class _RegionGrid:
@@ -158,7 +165,9 @@ class _RegionGrid:
 
     def __init__(self, value: Optional[int], regions: Optional[Tuple[_RegionCandidateCells, ...]] = None) -> None:
         if value is not None and regions is None:
-            self._regions = tuple([_RegionCandidateCells(row, column, value) for row in [0, 3, 6] for column in [0, 3, 6]])  # type: ignore
+            self._regions = tuple(
+                [_RegionCandidateCells(row, column, value) for row in [0, 3, 6] for column in [0, 3, 6]]
+            )  # type: ignore
         elif value is None and regions is not None:
             self._regions = regions
         else:

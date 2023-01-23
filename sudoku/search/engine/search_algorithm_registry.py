@@ -67,7 +67,8 @@ class SearchAlgorithmRegistry:
         if algorithm_name not in SearchAlgorithmRegistry._entries:
             _logger.error("No algorithm with the name %s found", algorithm_name)
             available_algorithms = ", ".join(SearchAlgorithmRegistry._entries.keys())
-            message = f"Unknown search algorithm {algorithm_name} has been requested. Available search algorithms: {available_algorithms}."
+            message = f"Unknown search algorithm {algorithm_name} has been requested. " \
+                "Available search algorithms: {available_algorithms}."
             raise NoSuchAlgorithmError(message)
         algorithm_class = SearchAlgorithmRegistry._entries[algorithm_name]
         _logger.info("Going to instantiate %s (name = %s)", algorithm_class.__name__, algorithm_name)
