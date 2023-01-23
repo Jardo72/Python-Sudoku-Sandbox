@@ -36,9 +36,9 @@ class AbstractSearchAlgorithm(ABC):
         Implementations of this method are supposed to perform an initialization of the search
         algorithm.
 
-            Paramateres:
-                puzzle (Grid):      Grid reprezenting the puzzle to be solved by this search algorithm
-                                    instance.
+        Args:
+            puzzle (Grid):      Grid reprezenting the puzzle to be solved by this search algorithm
+                                instance.
         """
         ...
 
@@ -49,11 +49,11 @@ class AbstractSearchAlgorithm(ABC):
         indicates that the search is completed (regardless of whether the search has been successful).
         Single invocation of this method is supposed to apply a single cell value.
 
-            Returns:
-                SearchStepOutcome:      Value indicating whether the search has to continue or not. If the
-                                        search has completed, the value allows to distinguish whether
-                                        a solution has been found, or the algorithm has failed to find
-                                        a solution.
+        Returns:
+            SearchStepOutcome:      Value indicating whether the search has to continue or not. If the
+                                    search has completed, the value allows to distinguish whether
+                                    a solution has been found, or the algorithm has failed to find
+                                    a solution.
         """
         ...
 
@@ -63,9 +63,9 @@ class AbstractSearchAlgorithm(ABC):
         Creates and returns a new snapshot of the grid representing the status of the search after the
         last invocation of the apply_cell_value method.
 
-            Returns:
-                Grid:   The created snapshot. The returned grid is supposed to be a copy of the grid used
-                        internally by this search algorithm, so eventual modification of the snapshot will
-                        not impact the internal status of the search.
+        Returns:
+            Grid:   The created snapshot. The returned grid is supposed to be a copy of the grid used
+                    internally by this search algorithm, so eventual modification of the snapshot will
+                    not impact the internal status of the search.
         """
         ...

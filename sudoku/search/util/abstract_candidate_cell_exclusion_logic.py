@@ -34,8 +34,27 @@ class AbstractCandidateCellExclusionLogic(ABC):
 
     @abstractmethod
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
+        """
+        Applies the given cell value to the cell with the given coordinates and excludes
+        all peers of the given cell as candidate cells for the given value.
+
+        Args:
+            cell_address (CellAddress):     The coordinates of the cell the given value is to
+                                            be applied to.
+            value (int):                    The value for the given cell.
+
+        Returns:
+            List of UnambiguousCandidate instances, one for each of those cells which have
+            been identified as unambiguous candidate cells with any region for any value.
+            None is returned if the exclusion has not led to any cell being identified as
+            unambiguous candidate cell.
+        """
         ...
 
     @abstractmethod
     def copy(self) -> AbstractCandidateCellExclusionLogic:
+        """
+        Creates and returns a copy of this object which behaves as if it was a deep copy
+        of this object.
+        """
         ...

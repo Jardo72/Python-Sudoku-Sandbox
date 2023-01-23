@@ -50,7 +50,8 @@ class _SearchSummaryHtmlRenderer:
     """
     Simple renderer that can take an instance of the sudoku.search.SearchSummary class and
     generate its HTML representation. The generated representation also includes a grid
-    presenting the cell values of the final grid contained in the search summary.
+    presenting the cell values of the final grid contained in the search summary. This class
+    is an internal helper - it is not supposed to be directly used by other modules.
     """
 
     def __init__(self, search_summary: SearchSummary) -> None:

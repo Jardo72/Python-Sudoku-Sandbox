@@ -22,4 +22,3 @@ class NoSuchAlgorithmError(Exception):
     Exception raised to indicate that search algorithm registry has been asked to
     instantiate an unknown search algorithm.
     """
-    pass

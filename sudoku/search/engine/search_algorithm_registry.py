@@ -55,7 +55,7 @@ class SearchAlgorithmRegistry:
         """
         Creates and returns a new instance of the search algorithm with the given name.
 
-        Parameters:
+        Args:
             algorithm_name (str):      The name of the search algorithm to be instantiated.
 
         Returns:

@@ -164,6 +164,12 @@ class SearchSupport:
         Returns the next unambiguous candidate identified by one of the former
         invocations of the set_cell_value method. None is returned if there is
         no unambiguous candidate.
+        
+        Returns:
+            Optional[UnambiguousCandidate]: An unambiguous candidate for one of the
+                                            undefined cells of the underlying grid,
+                                            or None if there is no unambiguous
+                                            candidate for any of the undefined cells.
         """
         while len(self._candidate_queue) > 0:
             candidate = self._candidate_queue.popleft()
@@ -206,8 +212,8 @@ class SearchSupport:
 
         Returns:
             SearchSupport: The created clone of this object. Be aware of the fact that
-                        the returned object is semantically equivalent to deep copy
-                        of this object. In other words, any modification of the clone will
-                        not change the status of this object and vice versa.
+                           the returned object is semantically equivalent to deep copy
+                           of this object. In other words, any modification of the clone will
+                           not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)

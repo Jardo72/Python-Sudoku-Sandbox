@@ -174,7 +174,7 @@ class _RegionGrid:
             message = "Invalid arguments. Exactly one of the two arguments is expected."
             raise ValueError(message)
 
-    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> List[UnambiguousCandidate]:
+    def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
         result = None
         for region in self._regions:
             exclusion_outcome = region.apply_and_exclude_cell_value(cell_address, value)
