@@ -154,7 +154,9 @@ class CandidateValueExclusionLogic:
             _logger.debug("Exclusion outcome = %s", exclusion_outcome)
             if exclusion_outcome is ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_FOUND:
                 result = result or []
-                candidate = UnambiguousCandidate(peer_address, self._candidates[row][column].get_single_remaining_applicable_value())
+                candidate = UnambiguousCandidate(
+                    peer_address, self._candidates[row][column].get_single_remaining_applicable_value()
+                )
                 result.append(candidate)
         return result
 

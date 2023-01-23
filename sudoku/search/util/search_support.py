@@ -43,6 +43,18 @@ class SearchSupport:
     """
 
     def __init__(self, grid: Optional[Grid] = None, original: Optional[SearchSupport] = None) -> None:
+        """
+        Constructs a new search support, either based on the given grid, or as a copy of the given
+        search support instance.
+
+        Agrs:
+            grid (Optional[Grid]):                 The grid for which the search is to be supported by
+                                                   the constructed search support. None is to be used
+                                                   if copy of an existing search support is to be created.
+            original (Optional[SearchSupport]):    The original search support which is to be cloned. None is
+                                                   to be used if the constructed search support is to be
+                                                   based on a grid.
+        """
         if self._is_ordinary_constructor(grid, original):
             self._init_from_scratch(grid)  # type: ignore
         elif self._is_copy_constructor(grid, original):
@@ -164,6 +176,12 @@ class SearchSupport:
         Returns the next unambiguous candidate identified by one of the former
         invocations of the set_cell_value method. None is returned if there is
         no unambiguous candidate.
+
+        Returns:
+            Optional[UnambiguousCandidate]: An unambiguous candidate for one of the
+                                            undefined cells of the underlying grid,
+                                            or None if there is no unambiguous
+                                            candidate for any of the undefined cells.
         """
         while len(self._candidate_queue) > 0:
             candidate = self._candidate_queue.popleft()
@@ -186,7 +204,10 @@ class SearchSupport:
                                           grid is to be taken into account.
 
         Returns:
-            CandidateList:
+            Optional[CandidateList]:      Candidate values applicable to one of the undefined cells
+                                          of the underlying grid, or None if no candidate value is
+                                          applicable to any of the undefined cell(s) of the underlying
+                                          grid.
         """
         result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:
@@ -203,8 +224,8 @@ class SearchSupport:
 
         Returns:
             SearchSupport: The created clone of this object. Be aware of the fact that
-                        the returned object is semantically equivalent to deep copy
-                        of this object. In other words, any modification of the clone will
-                        not change the status of this object and vice versa.
+                           the returned object is semantically equivalent to deep copy
+                           of this object. In other words, any modification of the clone will
+                           not change the status of this object and vice versa.
         """
         return SearchSupport(original=self)

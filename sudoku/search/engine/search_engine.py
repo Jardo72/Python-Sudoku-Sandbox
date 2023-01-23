@@ -44,6 +44,9 @@ class _OutcomeMapping:
 
     @staticmethod
     def convert(step_outcome: SearchStepOutcome) -> SearchOutcome:
+        """
+        Converts the given search step outcome to the corresponding search outcome.
+        """
         assert step_outcome in _OutcomeMapping._entries
         return _OutcomeMapping._entries[step_outcome]
 
@@ -126,6 +129,23 @@ class _SearchJob:
 
 
 def find_solution(puzzle_cell_values: List[List[Optional[int]]], algorithm_name: str, timeout_sec: int) -> SearchSummary:
+    """
+    Tries to finds a solution for the puzzle with the given cell values, using the specified search algorithm.
+
+    Args:
+        puzzle_cell_values:
+        algorithm_name (str):    The name of the search algorithm to be used.
+        timeout_sec (int):       The timeout (in seconds) for the search. If the timeout is expired before the
+                                 search is completed, the search is aborted, and the returned search summary
+                                 indicates timeout.
+
+    Returns:
+        SearchSummary:      Search summary with information about the search like duration, algorithm used etc.
+                            as well with the final grid (i.e. the solution in case of successful search).
+
+    Raises:
+        InvalidPuzzleError:     If the given puzzle is not valid.
+    """
     _logger.info("Going to start %s search (timeout = %d sec)", algorithm_name, timeout_sec)
     puzzle = Grid(puzzle_cell_values)
     if not puzzle.is_valid():

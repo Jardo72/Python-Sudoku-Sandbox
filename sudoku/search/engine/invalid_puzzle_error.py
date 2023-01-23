@@ -24,4 +24,3 @@ class InvalidPuzzleError(Exception):
       a column, or in a region
     * or does not contain any undefined cells.
     """
-    pass

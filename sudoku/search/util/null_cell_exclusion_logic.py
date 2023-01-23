@@ -31,8 +31,14 @@ class NullCandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
     """
 
     def apply_and_exclude_cell_value(self, cell_address: CellAddress, value: int) -> Optional[List[UnambiguousCandidate]]:
+        """
+        Just an empty implementation of the method.
+        """
         return None
 
     def copy(self) -> AbstractCandidateCellExclusionLogic:
-        # no reason to create a new instance as this class is stateless
+        """
+        Returns the self reference. There is no reason to create a new instance as this
+        class is stateless.
+        """
         return self

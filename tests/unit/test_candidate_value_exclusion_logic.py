@@ -480,7 +480,8 @@ class TestCandidateValueExclusionLogic:
         exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 2), 5)
         exclusion_logic.apply_and_exclude_cell_value(get_cell_address(8, 5), 9)
 
-        actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(CandidateQueryMode.UNDEFINED_CELL_WITH_LEAST_CANDIDATES)
+        actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(
+            CandidateQueryMode.UNDEFINED_CELL_WITH_LEAST_CANDIDATES)
         expected_candidate_list = CandidateList(get_cell_address(8, 8), (4, 6, 8))
         assert actual_candidate_list == expected_candidate_list
 
@@ -640,6 +641,7 @@ class TestCandidateValueExclusionLogic:
         clone.apply_and_exclude_cell_value(get_cell_address(3, 3), 1)
         clone.apply_and_exclude_cell_value(get_cell_address(4, 7), 2)
 
-        actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(CandidateQueryMode.UNDEFINED_CELL_WITH_LEAST_CANDIDATES)
+        actual_candidate_list = exclusion_logic.get_undefined_cell_candidates(
+            CandidateQueryMode.UNDEFINED_CELL_WITH_LEAST_CANDIDATES)
         expected_candidate_list = CandidateList(get_cell_address(3, 4), (1, 2, 4, 5, 6))
         assert expected_candidate_list == actual_candidate_list

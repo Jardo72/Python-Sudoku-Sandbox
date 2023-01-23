@@ -146,6 +146,17 @@ class Grid:
     _validation_blocks = _create_validation_blocks()
 
     def __init__(self, cell_values: Optional[CellValues] = None, original: Optional[Grid] = None) -> None:
+        """
+        Constructs a new instance of this class, either using the given initial cell values, or as a copy
+        of the given grid.
+
+        Args:
+            cell_values (Optional[CellValues]):     The initial cell values. None is to be used if a copy
+                                                    of the given grid is to be created.
+            original (Grid):                        Original grid whose clone is to be created. None is to
+                                                    be used if the created grid is to be initialized from the
+                                                    given initial cell values..
+        """
         if Grid._is_ordinary_constructor(cell_values, original):
             self._cells, self._undefined_cell_count = Grid._create_cells(cell_values)  # type: ignore
         elif Grid._is_copy_constructor(cell_values, original):
