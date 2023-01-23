@@ -43,6 +43,18 @@ class SearchSupport:
     """
 
     def __init__(self, grid: Optional[Grid] = None, original: Optional[SearchSupport] = None) -> None:
+        """
+        Constructs a new search support, either based on the given grid, or as a copy of the given
+        search support instance.
+
+        Agrs:
+            grid (Optional[Grid]):                 The grid for which the search is to be supported by
+                                                   the constructed search support. None is to be used
+                                                   if copy of an existing search support is to be created.
+            original (Optional[SearchSupport]):    The original search support which is to be cloned. None is
+                                                   to be used if the constructed search support is to be
+                                                   based on a grid.
+        """
         if self._is_ordinary_constructor(grid, original):
             self._init_from_scratch(grid)  # type: ignore
         elif self._is_copy_constructor(grid, original):
@@ -164,7 +176,7 @@ class SearchSupport:
         Returns the next unambiguous candidate identified by one of the former
         invocations of the set_cell_value method. None is returned if there is
         no unambiguous candidate.
-        
+
         Returns:
             Optional[UnambiguousCandidate]: An unambiguous candidate for one of the
                                             undefined cells of the underlying grid,
