@@ -186,7 +186,10 @@ class SearchSupport:
                                           grid is to be taken into account.
 
         Returns:
-            CandidateList:
+            Optional[CandidateList]:      Candidate values applicable to one of the undefined cells
+                                          of the underlying grid, or None if no candidate value is
+                                          applicable to any of the undefined cell(s) of the underlying
+                                          grid.
         """
         result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:

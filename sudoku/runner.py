@@ -152,7 +152,7 @@ def print_search_summary(search_summary: SearchSummary, use_color: bool) -> None
 
 
 def generate_html_file(search_summary: SearchSummary, filename: str) -> None:
-    with open(filename, "w") as output_file:
+    with open(filename, "w", encoding="UTF-8") as output_file:
         html_content = render_as_html(search_summary)
         output_file.write(html_content)
 
