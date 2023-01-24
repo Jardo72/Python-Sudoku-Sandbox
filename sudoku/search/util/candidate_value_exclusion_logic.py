@@ -48,6 +48,11 @@ class _CandidateValues:
         self._applicable_value_count = applicable_value_count
 
     def clear(self) -> None:
+        """
+        Eliminates all candidate values for the cell corresponding to this object. After an
+        invocation of this method, no value is applicable to the cell corresponding to this
+        object.
+        """
         self._bitmask = 0
         self._applicable_value_count = 0
 
@@ -67,6 +72,18 @@ class _CandidateValues:
         return tuple(result)
 
     def exclude_value(self, value: int) -> ExclusionOutcome:
+        """
+        Excludes the given value from the applicable candidate values for the cell corresponding to
+        this object.
+
+        Args:
+            value (int):    The value to be excluded.
+
+        Returns:
+            ExclusionOutcome:      Enum value indicating whether the exclusion has led to identification
+                                   of an unambiguous candidate value for the cell corresponding to this
+                                   object.
+        """
         _logger.debug("Going to exclude the value %d, bitmask before exclusion = %s", value, format(self._bitmask, "b"))
         value_mask = 1 << (value - 1)
         if self._bitmask & value_mask == value_mask:
@@ -78,6 +95,11 @@ class _CandidateValues:
         return ExclusionOutcome.UNAMBIGUOUS_CANDIDATE_NOT_FOUND
 
     def get_single_remaining_applicable_value(self) -> int:  # type: ignore
+        """
+        Returns the one and only candidate value applicable to the cell corresponding to this object.
+        This method can only be invoked if there is only one applicable candidate value. Otherwise,
+        an invocation of this method will fail.
+        """
         assert self._applicable_value_count == 1, \
             f"Cannot provide single remaining applicable value ({self._applicable_value_count} candidates remaining)."
         for value in range(1, 10):

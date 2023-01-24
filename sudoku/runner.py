@@ -170,6 +170,8 @@ def main() -> None:
     except InvalidInputError as e:
         print()
         print(f"Failed to parse the input file {command_line_arguments.input_file}: {str(e)}")
+        print()
+        print(epilog())
     except (InvalidPuzzleError, NoSuchAlgorithmError) as e:
         print()
         print(f"Puzzle rejected by the search engine: {str(e)}")
@@ -179,6 +181,8 @@ def main() -> None:
         print()
         print_exc()
     except (ValueError, RuntimeError, AssertionError, Exception):
+        print()
+        print("Unexpected error, eventually a bug in the application")
         print()
         print_exc()
     finally:
