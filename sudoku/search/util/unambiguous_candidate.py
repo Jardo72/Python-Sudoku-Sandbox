@@ -20,6 +20,7 @@
 from dataclasses import dataclass
 
 from sudoku.grid import CellAddress
+from .candidate_list import CandidateList
 
 
 @dataclass(frozen=True)
@@ -31,3 +32,11 @@ class UnambiguousCandidate:
     """
     cell_address: CellAddress
     value: int
+
+    def as_candidate_list(self) -> CandidateList:
+        """
+        Creates and returns a new candidate list representing this unambiguous candidate.
+        The returned candidate list has the same cell address as this unambiguous candidate,
+        and it carries a single candidate value, namely the value of this unambiguous candidate.
+        """
+        return CandidateList(self.cell_address, (self.value, ))

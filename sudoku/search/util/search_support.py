@@ -213,7 +213,7 @@ class SearchSupport:
             unambiguous_candidate = self.get_unambiguous_candidate()
             if unambiguous_candidate:
                 _logger.debug("Going to return candidate list based on unambiguous candidate")
-                return CandidateList(unambiguous_candidate.cell_address, (unambiguous_candidate.value, ))
+                return unambiguous_candidate.as_candidate_list()
         result = self._value_exclusion_logic.get_undefined_cell_candidates(mode)
         if result:
             _logger.info("Undefined cell candidates found (mode = %s): %s", mode, result)
