@@ -42,6 +42,8 @@ class SearchSupport:
     logic keeping track of applicable candidate values for the grid.
     """
 
+    __slots__ = "_value_exclusion_logic",  "_cell_exclusion_logic", "_candidate_queue", "_grid"
+
     def __init__(self, grid: Optional[Grid] = None, original: Optional[SearchSupport] = None) -> None:
         """
         Constructs a new search support, either based on the given grid, or as a copy of the given

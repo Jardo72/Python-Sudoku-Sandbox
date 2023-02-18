@@ -37,6 +37,8 @@ class _RegionCandidateCells:
     value is applicable.
     """
 
+    __slots__ = "_topmost_row", "_leftmost_column", "_value", "_bitmask", "_applicable_cell_count"
+
     _row_peers = {0: 0b111111000, 1: 0b111000111, 2: 0b000111111}
 
     _column_peers = {0: 0b110110110, 1: 0b101101101, 2: 0b011011011}
@@ -163,6 +165,8 @@ class _RegionGrid:
     aggregates 9 instances of _RegionCandidateCells.
     """
 
+    __slots__ = "_regions"
+
     def __init__(self, value: Optional[int], regions: Optional[Tuple[_RegionCandidateCells, ...]] = None) -> None:
         if value is not None and regions is None:
             self._regions = tuple(
@@ -202,6 +206,8 @@ class CandidateCellExclusionLogic(AbstractCandidateCellExclusionLogic):
     candidate value. This class is an internal helper that should not be used directly
     by other packages.
     """
+
+    __slots__ = "_region_grids"
 
     def __init__(self, original_exclusion_logic: Optional[CandidateCellExclusionLogic] = None) -> None:
         if original_exclusion_logic is None:
