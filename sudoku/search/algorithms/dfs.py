@@ -37,6 +37,8 @@ class _SearchGraphNode:
     algorithm.
     """
 
+    __slots__ = "_search_support", "_candidate_list", "_current_index"
+
     def __init__(self, search_support: SearchSupport, candidate_list: CandidateList) -> None:
         self._search_support = search_support
         self._candidate_list = candidate_list
@@ -69,6 +71,8 @@ class _SearchGraphNodeStack:
     Internal helper class supporting the implementation of the DFS algorithm. This class
     implements the stack used by the DFS algorithm.
     """
+
+    __slots__ = "_entries"
 
     def __init__(self) -> None:
         self._entries: Deque = deque()

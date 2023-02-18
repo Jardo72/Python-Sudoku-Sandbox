@@ -23,7 +23,7 @@ from sudoku.grid import CellAddress
 from .candidate_list import CandidateList
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class UnambiguousCandidate:
     """
     Immutable structure carrying information about an unambiguous candidate for an

@@ -30,6 +30,9 @@ _logger = getLogger(__name__)
 
 
 class _Cell:
+
+    __slots__ = "_value", "_status"
+
     """
     Immutable structure whose instance represents a single cell of a Sudoku grid. As this class is
     immutable, single instance of this class can be used by many grids simultaneously, even in
@@ -142,6 +145,8 @@ class Grid:
     the objects representing the cells, it is enough to clone the collection containing the
     cell objects.
     """
+
+    __slots__ = "_cells", "_undefined_cell_count"
 
     _validation_blocks = _create_validation_blocks()
 
