@@ -23,7 +23,7 @@ from .search_outcome import SearchOutcome
 from sudoku.grid import Grid
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SearchSummary:
     """
     Immutable structure carrying detailed information about the outcome of a search

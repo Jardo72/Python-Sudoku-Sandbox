@@ -22,7 +22,7 @@ from itertools import product
 from typing import List, Tuple
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class CellAddress:
     """
     Immutable structure whose instance represents the coordinates (i.e. row and column) of a single

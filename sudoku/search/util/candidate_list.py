@@ -23,7 +23,7 @@ from typing import Sized, Tuple
 from sudoku.grid import CellAddress
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class CandidateList(Sized):
     """
     Immutable structure carrying all candidate values applicable to a single undefined

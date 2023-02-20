@@ -31,7 +31,7 @@ from sudoku.search.util import CandidateQueryMode, SearchSupport
 _logger = getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class _StepInput:
     """
     Internal structure supporting the implementation of the BFS algorithm. Single
@@ -48,6 +48,8 @@ class _BreadthFirstSearch(AbstractSearchAlgorithm):
     Base class providing functionality common to both breadth-first search (BFS)
     implementations of search algorithm.
     """
+
+    __slots__ = "_candidate_query_mode", "_queue"
 
     def __init__(self, candidate_query_mode: CandidateQueryMode) -> None:
         self._candidate_query_mode = candidate_query_mode

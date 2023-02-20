@@ -43,6 +43,8 @@ class _CandidateValues:
     method as the value 5 is not applicable anymore.
     """
 
+    __slots__ = "_bitmask", "_applicable_value_count"
+
     def __init__(self, bitmask: int = 0b111111111, applicable_value_count: int = 9) -> None:
         self._bitmask = bitmask
         self._applicable_value_count = applicable_value_count
@@ -129,6 +131,8 @@ class CandidateValueExclusionLogic:
     is considered as unambiguous candidate for that cell. This class is an internal helper
     which should not be used directly by other packages.
     """
+
+    __slots__ = "_candidates"
 
     def __init__(self, original: Optional[CandidateValueExclusionLogic] = None) -> None:
         if original:

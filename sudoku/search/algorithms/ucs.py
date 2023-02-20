@@ -35,6 +35,8 @@ class _UnambiguousCandidateSearch(AbstractSearchAlgorithm):
     implementations of search algorithm.
     """
 
+    __slots__ = "_search_support"
+
     @abstractmethod
     def _create_search_support(self, puzzle: Grid) -> SearchSupport:
         ...
